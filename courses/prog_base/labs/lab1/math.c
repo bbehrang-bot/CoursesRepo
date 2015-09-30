@@ -5,7 +5,7 @@ double calc(double x, double y, double z) {
   double n1 = 2;
   double a0,a1,a2;
 
-if(x-y<0||x+y==0||z+abs(x-y)==0||x-y==0||z==0)
+if(x+y==0||z+abs(x-y)==0||x-y==0||z==0)
 {
     a = NAN;
 }
