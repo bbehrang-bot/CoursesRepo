@@ -7,20 +7,20 @@ int satisfies(int a, int b, int c)
     int sum2;
     if(a<0 && b<0 && c<0)
     {
-        if(a<b && a<c)
+        if(a<=b && a<=c)
         {
 
             modmin = abs(a);
             sum2 = b+c;
         }
 
-        else if(b<a && b<c)
+        else if(b<=a && b<=c)
         {
             modmin = abs(b);
             sum2=a+c;
         }
 
-        else if(c<a && c<b)
+        else if(c<=a && c<=b)
         {
             modmin = abs(c);
             sum2 = a+b;

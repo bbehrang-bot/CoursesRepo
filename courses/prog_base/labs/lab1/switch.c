@@ -1,5 +1,24 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int exec(int, int, int);
+
+int main() {
+    int opval = 10, aval = 3, bval = 5;
+    int resultVal;
+
+    resultVal = exec(opval, aval, bval);
+
+    printf("%i", resultVal);
+    return 0;
+}
+// copy the code below to the answers files and add #include <math.h> at the beginning
 int exec(int op, int a, int b) {
    int result;
+   int n0 = 5;
+int n1 = 2;
    switch(op)
    {
    case 0:
@@ -24,7 +43,10 @@ int exec(int op, int a, int b) {
     }
     case 4:
     {
-        result=a/b;
+        if(b==0)
+            result = NAN;
+        else
+            result=a/b;
         break;
     }
     case 5:
@@ -54,7 +76,7 @@ int exec(int op, int a, int b) {
     }
     case 8:
     {
-        result=fmax(a,b)
+        result=fmax(a,b);
         break;
     }
     case 9:
@@ -65,49 +87,57 @@ int exec(int op, int a, int b) {
     case 10:
     {
         int p=0;
-        switch(abs(b)%8)){
-        case 0 :
+        int q = abs(b)%8;
+        if(q==0)
+
         {
             p =sizeof(char);
-            break;
+
         }
-         case 1 :
+        else if (q==1)
+
         {
             p =sizeof(signed char);
-            break;
+
         }
-         case 2 :
+         else if (q==2)
+
         {
             p =sizeof(short);
-            break;
+
         }
-         case 3 :
+        else if (q==3)
+
         {
             p =sizeof(unsigned int);
-            break;
+
         }
-         case 4 :
+          else if (q==4)
+
         {
             p =sizeof(long);
-            break;
+
         }
-         case 5 :
+         else if (q==5)
+
         {
             p =sizeof(unsigned long long);
-            break;
+
         }
-         case 6 :
+         else if (q==6)
+
         {
             p =sizeof(float);
             break;
         }
-         case 7 :
+         else if (q==7)
+
         {
             p =sizeof(double);
-            break;
-        }
 
         }
+
+
         return abs(a)*p;
         break;
     }
@@ -131,6 +161,6 @@ break;
 
 
 
- 
+
    return result;
 }
