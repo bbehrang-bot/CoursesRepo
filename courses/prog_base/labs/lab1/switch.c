@@ -1,20 +1,3 @@
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-int exec(int, int, int);
-
-int main() {
-    int opval = 10, aval = 3, bval = 5;
-    int resultVal;
-
-    resultVal = exec(opval, aval, bval);
-
-    printf("%i", resultVal);
-    return 0;
-}
-// copy the code below to the answers files and add #include <math.h> at the beginning
 int exec(int op, int a, int b) {
    int result;
    int n0 = 5;
