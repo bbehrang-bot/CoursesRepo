@@ -16,7 +16,7 @@ int satisfies(int a, int b, int c)
 
         else if(b<=a && b<=c)
         {
-            modmin = abs(b);
+            modmin = fabs(b);
             sum2=a+c;
         }
 
@@ -56,6 +56,7 @@ int satisfies(int a, int b, int c)
 
 }
 
+ if ((int)(log2(modmin))%1==0) //2.4555
 
 
 else if(a>=0 || b>=0||c>=0)
