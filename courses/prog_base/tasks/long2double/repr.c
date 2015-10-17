@@ -76,12 +76,12 @@ else
         answer = -INFINITY;
      else if(exp>0&&exp<2047)
          answer = sign*(pow(2,exp-1023))*(1+fr);
-     else if(exp=0&&fr!=0)
+     else if(exp==0&&fr!=0)
         answer = sign*pow(2,-1022)*fr;
-     else if(exp=0&&fr==0&&sign==-1)
-        answer = -0;
+     else if(exp==0&&fr==0&&sign==-1)
+        answer = -0.0;
      else if(exp==0&&fr==0&&sign==1)
-        answer =+0;
+        answer =+0.0;
 
 
     return answer;
