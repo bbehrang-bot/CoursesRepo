@@ -12,7 +12,7 @@ int i = 1;
     double answer;
      double nLong = x;
     i=0;
-if(x<0){
+if(x<0||x==-0.0){
     x=fabs(x);
     x=x-1;
     b[0]=1;
