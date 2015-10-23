@@ -9,7 +9,7 @@ int j=0;
 srand(time(NULL));
 for(i;i<=3;i++){
     for(j=0;j<=3;j++){
-        mat[i][j]= (rand() % 2000 )-1000;
+        mat[i][j]= (rand() % 2000 )-999;
     }
 }
 }
