@@ -46,7 +46,7 @@ int satisfies(int a, int b, int c)
         {
             result= 1;
         }
-        else if(abs(sum2)>modmin && sum2>-256)
+        else if(abs(sum2)>16 || modmin>8)
     {
 
         result= 1;
@@ -56,7 +56,6 @@ int satisfies(int a, int b, int c)
 
 }
 
- if ((int)(log2(modmin))%1==0) //2.4555
 
 
 else if(a>=0 || b>=0||c>=0)
