@@ -6,7 +6,6 @@ void fillRand(int mat[4][4]){
 
 int i =0;
 int j=0;
-srand(time(NULL));
 for(i;i<=3;i++){
     for(j=0;j<=3;j++){
         mat[i][j]= (rand() % 1999 )-999;
