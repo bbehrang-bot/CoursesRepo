@@ -1,5 +1,6 @@
 const char * process(char * resultStr, const char * textLines[], int linesNum, const char * extraStr){
-    int size= strlen(textLines);
+
+    char h[100];
     char *index;
     int i=0;
     int j = 0;
@@ -16,15 +17,16 @@ const char * process(char * resultStr, const char * textLines[], int linesNum, c
         }
         if(counter<10)
         {
-            sprintf(index,"%i",i+1); /*if its number of line i+1 , if its the index i */
-            strcat(resultStr,index);
-            strcat(resultStr," ");
-            strcat(resultStr,textLines[i]);
-            strcat(resultStr,",");
+            char c[100]={0};
+            sprintf(c,"%i",i+1);
+            strcat(h,c);
+            strcat(h," ");
+            strcat(h,textLines[i]);
+            strcat(h,",");
         }
     }
 
-
+strcat(resultStr,h);
 
 return resultStr;
 }
