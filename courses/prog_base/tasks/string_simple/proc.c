@@ -1,4 +1,4 @@
-const char * process(char * resultStr, const char * textLines[], int linesNum, const char * extraStr){
+ char * process(char * resultStr, const char * textLines[], int linesNum, const char * extraStr){
 
 
 
@@ -38,3 +38,4 @@ const char * process(char * resultStr, const char * textLines[], int linesNum, c
 
 
 return resultStr;
+}
