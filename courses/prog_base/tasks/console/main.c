@@ -307,50 +307,7 @@ void fillSimple()
     fillRectangle(pos,70,4,1);
     */
 }
-void fillCorner()
-{
-     fillRectangle(pos,0,24,1);
-    fillRectangle(pos,70,4,1);
 
-    fillRectangle(pos,0,19,2);
-    fillRectangle(pos,70,9,2);
-    fillRectangle(pos,10,24,2);
-    fillRectangle(pos,60,4,2);
-
-
-    fillRectangle(pos,20,24,3);fillRectangle(pos,50,4,3);
-    fillRectangle(pos,10,19,3);fillRectangle(pos,60,9,3);
-    fillRectangle(pos,10,19,3);fillRectangle(pos,70,14,3);
-    fillRectangle(pos,0,14,3);
-
-
-
-
-
-    fillRectangle(pos,0,9,1);fillRectangle(pos,70,19,1);
-    fillRectangle(pos,10,14,1);fillRectangle(pos,60,14,1);
-    fillRectangle(pos,20,19,1); fillRectangle(pos,50,9,1);
-    fillRectangle(pos,30,24,1); fillRectangle(pos,40,4,1);
-
-
-
-
-
-
-
-
-    fillRectangle(pos,40,24,2); fillRectangle(pos,30,4,2);
-    fillRectangle(pos,30,19,2);fillRectangle(pos,40,9,2);
-    fillRectangle(pos,20,14,2); fillRectangle(pos,50,14,2);
-    fillRectangle(pos,10,9,2);fillRectangle(pos,60,19,2);
-    fillRectangle(pos,0,4,2); fillRectangle(pos,70,24,2);
-
-    fillRectangle(pos,10,4,3);fillRectangle(pos,60,24,3);
-    fillRectangle(pos,20,9,3); fillRectangle(pos,50,19,3);
-    fillRectangle(pos,30,14,3);fillRectangle(pos,40,14,3);
-    fillRectangle(pos,40,19,3);  fillRectangle(pos,30,9,3);
-    fillRectangle(pos,50,24,3);  fillRectangle(pos,20,4,3);
-}
 int main()
 {
     const long sleepTime = 50;
