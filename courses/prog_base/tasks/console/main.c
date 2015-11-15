@@ -4,7 +4,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4996)
 COORD pos;
-
+void check(int *x,int *y)
+{
+    if(*x<0)
+        *x=0;
+    if(*y<0)
+        *y=4;
+    if(*y>24)
+        *y=24;
+}
 void ccc(HANDLE hConsole,COORD pos)
 {
 
@@ -76,8 +84,176 @@ void fillRectangle(COORD pos,int x,int y,int color)
 
 void fillSimple()
 {
-    fillRectangle(pos,0,24,1);
+    int directionX = 1;
+    int directionY = -1;
+    int color=1;
+    int state=1;
+    int i,j;
+    int x=0;
+    int y=24;
+    for(i=0;i<13;i++)
+    {
+        switch(state)
+        {
+        case 1 :
+            {
+              fillRectangle(pos,x,y,color);
+            if(x==70)
+            {
+                state=33;
+                break;
+            }
+              color++;
+              state++;
+              break;
+            }
+        case 2 :
+            {
 
+
+
+                y = y + (directionY*5);
+                directionY=directionY*-1;
+                fillRectangle(pos,x,y,color);
+                if(directionY==-1)
+                {
+                    directionX=-1;
+               x = x + (directionX*10);
+                y = y + (directionY*5);
+                fillRectangle(pos,x,y,color);
+                 x = 70;
+                 color=1;
+                 state=1;
+                }
+                else
+                {
+                 x = x + (directionX*10);
+                y = y + (directionY*5);
+                fillRectangle(pos,x,y,color);
+                x = x + (directionX*10);
+                 color++;
+            state++;
+                }
+
+
+
+              break;
+            }
+        case 3:
+            {
+              j=0;
+            directionY=-1*directionY;
+            directionX=-1 *directionX;
+              for(j;j<3;j++)
+              {
+                    fillRectangle(pos,x,y,color);
+
+                    x = x + (directionX*10);
+                     y = y + (directionY*5);
+              }
+              if(directionY==1)
+              {
+                  x=70;y=4;
+                  color=2;
+                  state--;
+              }
+              else{ color=1;
+            state++;}
+
+            check(&x,&y);
+                break;
+            }
+             case 4:
+            {
+              j=0;
+             directionY=-1*directionY;
+            directionX=-1 *directionX;
+              for(j;j<4;j++)
+              {
+                    fillRectangle(pos,x,y,color);
+
+                    x = x + (directionX*10);
+                    y = y + (directionY*5);
+              }
+               if(directionY==-1)
+            {
+                state--;
+                color=3;
+                x=50;
+
+            }
+            else
+            {
+                   color++;
+            state++;
+            }
+
+            check(&x,&y);
+                break;
+            }
+            case 5:
+            {
+              j=0;
+            directionY=-1*directionY;
+            directionX=-1*directionX;
+              for(j;j<5;j++)
+              {
+                    fillRectangle(pos,x,y,color);
+
+                    x = x + (directionX*10);
+                     y = y + (directionY*5);
+              }
+            color++;
+            if(directionY==1)
+            {
+                state--;
+                color=1;
+                y=19;
+                x=70;
+            }
+            else
+            {
+                  state++;
+            }
+
+           check(&x,&y);
+                break;
+            }
+             case 6:
+            {
+             j=0;
+            directionY=  directionY*-1;
+            directionX=directionX*-1;
+              for(j;j<5;j++)
+              {
+                     x = x + (directionX*10);
+                    fillRectangle(pos,x,y,color);
+
+
+                     y = y + (directionY*5);
+              }
+
+
+            if(directionY==-1)
+            {
+                state=5;
+                color=2;
+                x+=10;
+
+            }
+            else
+            {
+                x=70;
+            }
+
+           check(&x,&y);
+                break;
+            }
+
+        }
+    }
+
+    /*fillRectangle(pos,0,24,1)
     fillRectangle(pos,0,19,2);
     fillRectangle(pos,10,24,2);
 
@@ -129,6 +305,7 @@ void fillSimple()
 
 
     fillRectangle(pos,70,4,1);
+    */
 }
 void fillCorner()
 {
@@ -180,13 +357,7 @@ int main()
      int q=0;
       const long s=1000;
        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    printf("If you Want the filling to start simultaneously from both corners type 1 , otherwise type 0\n");
 
-    scanf("%i",&q);
-    system("cls");
-    if(q==1)
-        fillCorner();
-    else
         fillSimple();
     pos.X=0;
     pos.Y=30;
