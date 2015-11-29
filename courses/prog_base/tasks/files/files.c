@@ -54,14 +54,10 @@ void fprocess(const char * pread, const char * pwrite)
     {
 
 
-        if(tmp[i]!=' ')
-        {
-
         a[0]=tmp[i];
         strcat(tmpResult,a);
-        if(i!=lineLength-2)
-            strcat(tmpResult," ");
-        }
+        strcat(tmpResult," ");
+
 
     }
     fclose(fpr);
@@ -69,8 +65,8 @@ void fprocess(const char * pread, const char * pwrite)
     result = fopen(pwrite,"w");
 
 
-    fprintf(result,tmpResult);
-    free(tmpResult);
+    fprintf(result,"%s",tmpResult);
+
 
 
 
