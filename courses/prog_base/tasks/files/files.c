@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 void fprocess(const char * pread, const char * pwrite)
 {
@@ -48,9 +50,13 @@ void fprocess(const char * pread, const char * pwrite)
     strcpy(tmpResult,"");
     for(i=0;i<strlen(tmp);i++)
     {
+        if(tmp[i]!=' ')
+        {
         a[0]=tmp[i];
         strcat(tmpResult,a);
         strcat(tmpResult," ");
+        }
+
     }
     fclose(fpr);
     FILE *result;
@@ -60,8 +66,16 @@ void fprocess(const char * pread, const char * pwrite)
     fprintf(result,tmpResult);
 
 
-	 fclose(result);
 
 
 
+
+
+}
+
+int main(void) {
+
+    fprocess("1.txt","result.txt");
+
+    return 0;
 }
