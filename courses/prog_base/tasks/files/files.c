@@ -22,7 +22,6 @@ void fprocess(const char * pread, const char * pwrite)
             while(a[0]!=EOF)
             {
                 lineLength++;
-                q= a[0];
                 a[0]=fgetc(fpr);
 
             }
@@ -42,12 +41,22 @@ void fprocess(const char * pread, const char * pwrite)
         a[0]=fgetc(fpr);
     }
 
-
+    int i;
+    char *tmpResult;
+    tmpResult = malloc(lineLength*2);
+    strcpy(tmpResult,"");
+    for(i=0;i<strlen(tmp);i++)
+    {
+        a[0]=tmp[i];
+        strcat(tmpResult,a);
+        strcat(tmpResult," ");
+    }
     fclose(fpr);
     FILE *result;
     result = fopen(pwrite,"w");
-    fprintf(result,tmp);
+    fprintf(result,tmpResult);
     free(tmp);
+    free(tmpResult);
 
 
 }
