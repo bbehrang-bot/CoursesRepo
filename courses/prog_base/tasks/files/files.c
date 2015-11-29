@@ -28,10 +28,11 @@ void fprocess(const char * pread, const char * pwrite)
                 a[0]=fgetc(fpr);
 
             }
+            int s = lineLength*sizeof(char);
             tmp=malloc(lineLength*sizeof(char));
             strcpy(tmp,"");
-            fseek(fpr,-lineLength,SEEK_END);
-            fgets(tmp,lineLength+1,fpr);
+            fseek(fpr,-lineLength-1,SEEK_END);
+            fgets(tmp,lineLength,fpr);
             break;
         }
         if(a[0]=='\n')
@@ -46,15 +47,20 @@ void fprocess(const char * pread, const char * pwrite)
 
     int i;
     char *tmpResult;
+    int g = lineLength*sizeof(char);
     tmpResult = malloc(lineLength*sizeof(char));
     strcpy(tmpResult,"");
     for(i=0;i<strlen(tmp);i++)
     {
+
+
         if(tmp[i]!=' ')
         {
+
         a[0]=tmp[i];
         strcat(tmpResult,a);
-        strcat(tmpResult," ");
+        if(i!=lineLength-2)
+            strcat(tmpResult," ");
         }
 
     }
@@ -64,6 +70,7 @@ void fprocess(const char * pread, const char * pwrite)
 
 
     fprintf(result,tmpResult);
+    free(tmpResult);
 
 
 
