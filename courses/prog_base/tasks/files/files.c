@@ -57,6 +57,7 @@ void fprocess(const char * pread, const char * pwrite)
     fprintf(result,tmpResult);
     free(tmp);
     free(tmpResult);
+    fclose(result);
 
 
 }
