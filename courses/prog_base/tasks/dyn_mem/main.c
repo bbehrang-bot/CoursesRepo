@@ -13,9 +13,9 @@ int main()
     *countNumbers = 0 ;
     gets(tmp);
     int *i;
-    char p;
+
     i = malloc(sizeof(int));
-    int v = strlen(tmp);
+
     *i=0;
 
     for((*i)=0;*i<strlen(tmp);(*i)++)
