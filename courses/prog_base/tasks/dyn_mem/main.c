@@ -33,6 +33,11 @@ int main()
         }
 
     }
+
     printf("Number of letters in your string is : %i\nNumber of numbers in your string is : %i",*countLetters,*countNumbers);
+    free(tmp);
+    free(countLetters);
+    free(countNumbers);
+    free(i);
     return 0;
 }
