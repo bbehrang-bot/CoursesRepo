@@ -1,5 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 void reverseStr(char *freading,char *fwriting)
 {
+
     FILE *fr;
     fr = fopen(freading,"r");
     if(fr==NULL)
