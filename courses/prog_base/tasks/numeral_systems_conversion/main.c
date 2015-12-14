@@ -212,11 +212,16 @@ if (countBeforeFrac!=strlen(number))
 
 
     }
-    printf("%s",resultBFraction);
-    return resultBFraction;
+    char *res;
+    res = malloc(strlen(resultBFraction)*sizeof(char));
+    strcpy(res,resultBFraction);
+    printf("%s",res);
+    return res;
+
 }
 int main() {
     char *s=ns_convert("ZO83.R", 36  , 3);
+    free(s);
     return 0;
 }
 
