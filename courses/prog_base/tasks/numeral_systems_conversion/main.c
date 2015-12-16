@@ -219,7 +219,7 @@ if (countBeforeFrac!=strlen(number))
     }
 
 
-    number=resultBFraction;
+    strcpy(number,resultBFraction);
     printf("%s",number);
     return number;
 
