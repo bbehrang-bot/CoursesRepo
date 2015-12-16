@@ -128,6 +128,11 @@ int checkTask(char* number, unsigned int sourceBase, unsigned int destBase)
                 return -1;
                 break;
             }
+        else if(number[i]=='-')
+        {
+            return -1;
+                break;
+        }
            }
             i++;
 
@@ -220,7 +225,7 @@ if (countBeforeFrac!=strlen(number))
 
 }
 int main() {
-    char *s=ns_convert("ZO83.R", 36  , 3);
+    char *s=ns_convert("-1", 2  , 3);
 
     return 0;
 }
