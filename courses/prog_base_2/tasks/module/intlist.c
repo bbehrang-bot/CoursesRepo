@@ -1,4 +1,9 @@
 #include "intlist.h"
+struct intList_s{
+    int * arr;
+    int size;
+    int capacity;
+};
 intList_t intList_new()
 {
     int * arr = malloc(DEFAULT_LIST_CAP * sizeof(int));
