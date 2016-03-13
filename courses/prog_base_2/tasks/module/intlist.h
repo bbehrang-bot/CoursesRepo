@@ -10,6 +10,7 @@ typedef struct intList_s * intList_t;
 intList_t intList_new();
 void intList_destructor(intList_t list);
 void intList_increse_capacity(intList_t list);
+int intList_getSize(intList_t list);
 void intList_add(intList_t list,int value, int index);
 void intList_removeL(intList_t list, int index);
 int intList_getMax(intList_t list);

@@ -20,6 +20,11 @@ void intList_increse_capacity(intList_t list)
     list->arr = arr2;
     list->capacity = capacity;
 }
+int intList_getSize(intList_t list)
+{
+    int size = list->size;
+    return list->size;
+}
 void intList_add(intList_t list,int value, int index)
 {
     int mySize = list->size;

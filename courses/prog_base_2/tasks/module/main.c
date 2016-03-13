@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "intlist.h"
+
+
+
 int main()
 {
     intList_t list1 = intList_new();
@@ -21,6 +24,8 @@ int main()
     printf("%i\n",v);
 
     intList_printList(list1);
+    printf("\n%i",intList_getSize(list1));
     intList_destructor(list1);
+
     return 0;
 }
