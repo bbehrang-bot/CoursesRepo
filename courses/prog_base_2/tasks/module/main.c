@@ -7,20 +7,20 @@ int main()
     const int size = 5;
     list1->arr = malloc(size * sizeof(int));
     list1->capacity = size;
-    add(list1,-1,0);
-    add(list1,1,1);
-    add(list1,2,2);
-    add(list1,3,3);
-    add(list1,4,4);
-    add(list1,5,5);
-    add(list1,22,2);
-    removeL(list1,3);
-    int v = getMax(list1);
+    intList_add(list1,-1,0);
+    intList_add(list1,1,1);
+    intList_add(list1,2,2);
+    intList_add(list1,3,3);
+    intList_add(list1,4,4);
+    intList_add(list1,5,5);
+    intList_add(list1,22,2);
+    intList_removeL(list1,3);
+    int v = intList_getMax(list1);
     printf("%i\n",v);
-    v = getMin(list1);
+    v = intList_getMin(list1);
     printf("%i\n",v);
 
-    printList(list1);
-    destructor_intList(list1);
+    intList_printList(list1);
+    intList_destructor(list1);
     return 0;
 }
