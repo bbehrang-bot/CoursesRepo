@@ -12,13 +12,13 @@ void getSecret(char *fullAddr, SOCKET recvSocket, char *secretOut)
 	if (send(recvSocket, getMessage, strlen(getMessage), 0)<0)
 	{
 		puts("Send failed");
-		return 1;
+		return;
 	}
 
 	if ((recvSize = recv(recvSocket, buffer, BUFFER_SIZE, 0)) == SOCKET_ERROR)
 	{
 		puts("Recv Failed");
-		return 1;
+		return;
 	}
 	buffer[recvSize] = '\0';
 	char *secretLine = "secret=";
@@ -35,6 +35,7 @@ void getSecret(char *fullAddr, SOCKET recvSocket, char *secretOut)
 		secPos++;
 		secOutIndex++;
 	}
+	secretOut[secOutIndex] = '\0';
 }
 
 void getArray(char *fullAddr, SOCKET recvSocket, int arrOut[100][100],int *rows,int *cols)
@@ -151,8 +152,7 @@ void findBiggestRow(int rows,int cols,int arr[100][100],char *result){
         strcat(result, tmp);
 
     }
-    puts("fun");
-    puts(result);
+    result[strlen(result)] = '\0';
 
 }
 void printArray(int rows,int cols,int arr[100][100])
@@ -167,7 +167,13 @@ void printArray(int rows,int cols,int arr[100][100])
     }
 }
 
-
+void initArray(int arr[100][100])
+{
+    int i,j;
+    for(i=0;i<100;i++)
+        for(j=0;j<100;j++)
+            arr[i][j] = 0;
+}
 
 
 int main()
@@ -183,9 +189,6 @@ int main()
 	struct hostent *he;
 	struct in_addr **addr_list;
 	int i;
-
-
-
 	if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
 	{
 		printf("Failed. Error Code : %d", WSAGetLastError());
@@ -226,11 +229,11 @@ int main()
 	printf("Secret received from server : %s\n", buffer);
 	sprintf(fullAddr, "%s?secret=%s", fullAddr, buffer);
 	int arr[100][100];
+	initArray(arr);
 	int rows=0;
 	int cols=0;
 	getArray(fullAddr, recvSocket, arr,&rows,&cols);
     char result[BUFFER_SIZE];
-    puts("HERE:");
     findBiggestRow(rows,cols,arr,result);
      strcpy(fullAddr, hostname);
     strcat(fullAddr, var);
