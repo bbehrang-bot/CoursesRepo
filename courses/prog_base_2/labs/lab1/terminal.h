@@ -2,7 +2,7 @@
 #define TERMINAL_H_INCLUDED
 #include "Turnstile.h"
 typedef enum TERMINAL_STATUS
-{TERMINAL_OK, TERMINAL_ERROR_NULL_PTR, TERMINAL_ERROR_NO_MEMORY} TERMINAL_STATUS;
+{TERMINAL_OK, TERMINAL_ERROR_NULL_PTR, TERMINAL_ERROR_NO_MEMORY, TERMINAL_ERROR_FULL} TERMINAL_STATUS;
 typedef struct terminal_s terminal_t;
 terminal_t * terminal_new(int id);
 void terminal_free(terminal_t * terminal);

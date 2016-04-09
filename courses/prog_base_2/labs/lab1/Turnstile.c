@@ -48,7 +48,7 @@ turnstile_t * turnstile_new(int id)
         ts->userArray[i] = user_new_empty();
     }
     // for i to YURNSTYLE_MAX_SIZE do
-    // userArray[i] = user_new();
+    turnstile_status = TURNSTILE_OK;
     return ts;
 }
 void turnstile_free(turnstile_t * ts)
@@ -58,8 +58,8 @@ void turnstile_free(turnstile_t * ts)
         turnstile_status = TURNSTILE_ERROR_NULL_PTR;
         return;
     }
-    for(int i=0;i<100;i++)
-        free(ts->userArray[i]);
+    for(int i=0;i<TURNSTILE_MAX_SIZE;i++)
+        user_free(ts->userArray[i]);
     free(ts);
     turnstile_status = TURNSTILE_OK;
 }
@@ -79,9 +79,9 @@ void turnstile_pass(turnstile_t * ts,user_t * userPassed)
         turnstile_status = TURNSTILE_ERROR_NULL_PTR;
         return;
     }
-    if(userPassed==NULL)
+    if(ts->passed_count == TURNSTILE_MAX_SIZE)
     {
-        //uStatus = USER_ERROR_NULL_PTR;
+        turnstile_status = TURNSTILE_ERROR_FULL;
         return;
     }
     ts->userArray[ts->passed_count] = userPassed;
@@ -171,7 +171,7 @@ const char * user_strturnstile_status(USER_STATUS turnstile_status)
 {
 
     static const char * strturnstile_status =
-    {"TURNSTILE_OK", "TURNSTILE_ERROR_NULL_PTR", "TURNSTILE_ERROR_NO_MEMORY"};
+    {"TURNSTILE_OK", "TURNSTILE_ERROR_NULL_PTR", "TURNSTILE_ERROR_NO_MEMORY","TURNSTILE_ERROR_FULL"};
     return strturnstile_status[turnstile_status];
 
 }

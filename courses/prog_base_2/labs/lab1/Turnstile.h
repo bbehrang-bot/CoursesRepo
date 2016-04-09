@@ -4,7 +4,7 @@
 #include <stdlib.h>
 typedef struct turnstile_s turnstile_t;///Turnstile count
 typedef enum TURNSTILE_STATUS
-{TURNSTILE_OK, TURNSTILE_ERROR_NULL_PTR, TURNSTILE_ERROR_NO_MEMORY} TURNSTILE_STATUS;
+{TURNSTILE_OK, TURNSTILE_ERROR_NULL_PTR, TURNSTILE_ERROR_NO_MEMORY,TURNSTILE_ERROR_FULL} TURNSTILE_STATUS;
 turnstile_t * turnstile_new_empty();
 turnstile_t * turnstile_new(int id);///Turnstile constructor , unique id
 void turnstile_free(turnstile_t * ts);///Free turnstile from memory

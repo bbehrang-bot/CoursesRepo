@@ -80,6 +80,7 @@ void terminal_unit_test() {
         cmocka_unit_test(ppassed_count_wasEmpty_hasThree),
         cmocka_unit_test(ppassed_Count_byType_wasZero_passedThreeType3),
         cmocka_unit_test(gget_last_error_wasOk_ok)
+
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
 }

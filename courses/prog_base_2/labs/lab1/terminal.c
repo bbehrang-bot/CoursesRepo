@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "terminal.h"
+#define TERMINAL_MAX_SIZE 100
 TERMINAL_STATUS terminal_status = TERMINAL_OK;
 struct terminal_s
 {
-    turnstile_t * tsArray[100];
+    turnstile_t * tsArray[TERMINAL_MAX_SIZE];
     int turnstile_count;
     int passed;
     int id;
@@ -29,7 +30,7 @@ terminal_t * terminal_new(int id)
     terminal->passed = 0;
     terminal->turnstile_count = 0;
    // terminal_init_arrayNull(100,terminal->tsArray);
-    for(int i=0;i<100;i++)
+    for(int i=0;i<TERMINAL_MAX_SIZE;i++)
         terminal->tsArray[i] = turnstile_new_empty();
     terminal_status = TERMINAL_OK;
     return terminal;
@@ -41,7 +42,7 @@ void terminal_free(terminal_t * terminal)
         terminal_status = TERMINAL_ERROR_NO_MEMORY;
         return;
     }
-    for(int i=0;i<100;i++)
+    for(int i=0;i<TERMINAL_MAX_SIZE;i++)
         free(terminal->tsArray[i]);
     free(terminal);
     terminal_status = TERMINAL_OK;
@@ -63,6 +64,11 @@ void terminal_add_turnstile(terminal_t * terminal,turnstile_t * ts)
     if(terminal==NULL)
     {
         terminal_status = TERMINAL_ERROR_NULL_PTR;
+        return;
+    }
+    if(terminal->passed == TERMINAL_MAX_SIZE)
+    {
+        terminal_status = TERMINAL_ERROR_FULL;
         return;
     }
     terminal->tsArray[terminal->turnstile_count] = ts;
@@ -137,7 +143,7 @@ const char * terminal_strterminal_status(TERMINAL_STATUS terminal_status)
 {
 
     static const char * strterminal_status =
-    {"TERMINAL_OK", "TERMINAL_ERROR_NULL_PTR", "TERMINAL_ERROR_NO_MEMORY"};
+    {"TERMINAL_OK", "TERMINAL_ERROR_NULL_PTR", "TERMINAL_ERROR_NO_MEMORY","TERMINAL_ERROR_FULL"};
     return strterminal_status[terminal_status];
 
 }

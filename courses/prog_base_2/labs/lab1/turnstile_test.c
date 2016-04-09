@@ -63,6 +63,22 @@ static void get_last_error_wasOk_ok(void **state)
     assert_int_equal(funcRes,correct);
     turnstile_free(ts);
 }
+static void get_last_error_isFull_full(void **state)
+{
+    turnstile_t * ts = turnstile_new(1);
+    for(int i=0;i<200;i++)
+    {
+        user_t * user1 = user_new("b","e",2);
+        turnstile_pass(ts,user1);
+
+
+    }
+    int status = turnstile_get_last_error();
+    int correct = 3;
+    assert_int_equal(status,correct);
+    turnstile_free(ts);
+
+}
 void turnstle_unit_test() {
 
     const struct CMUnitTest tests[] =
@@ -70,7 +86,8 @@ void turnstle_unit_test() {
         cmocka_unit_test(nnew_id_isSet),
         cmocka_unit_test(passed_count_wasEmpty_hasThree),
         cmocka_unit_test(passed_Count_byType_wasZero_passedThreeType3),
-        cmocka_unit_test(get_last_error_wasOk_ok)
+        cmocka_unit_test(get_last_error_wasOk_ok),
+        cmocka_unit_test(get_last_error_isFull_full)
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
 }
