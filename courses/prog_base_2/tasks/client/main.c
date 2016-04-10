@@ -183,7 +183,7 @@ int main()
 	struct sockaddr_in recvAddr;
 	char* hostname = "pb-homework.appspot.com";
 	char *var = "/var/10";
-	char *fullAddr;
+	char fullAddr[1000];
 	char ip[100];
 	char buffer[BUFFER_SIZE];
 	struct hostent *he;
