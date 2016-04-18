@@ -106,8 +106,12 @@ void server_teacherId(socket_t * client, http_request_t * req, int index) {
 		     strcpy(teachers[index].idCard.birthTown,str);
 		}
 		str = http_request_getArg(req, "birthday");
-		const char tmp[strlen(str)];
-		strcpy(tmp,str);
+		int size = 10;
+		if(str!=NULL)
+             size = strlen(str);
+        const char tmp[size];
+        if(str!=NULL)
+            strcpy(tmp,str);
 		if (str != NULL) {
 			if (str[5] != NULL && str[4] == '-' && atoi(str) > 1900 && atoi(str) < 2016) {
 				str = strtok(str, "-");
