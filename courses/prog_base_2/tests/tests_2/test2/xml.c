@@ -13,7 +13,6 @@ struct work{
     char shop_name[15];
 };
 
-
 struct person{
     char name[15];
     char surname[15];

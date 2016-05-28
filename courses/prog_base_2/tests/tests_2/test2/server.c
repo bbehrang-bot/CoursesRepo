@@ -21,7 +21,6 @@ void server_database(socket_t * client) {
 		puts(buf);
 	}
 	*/
-
 	db_t * db = db_new("admin.db");
 	list_t list = database_to_list(db);
 	puts(((struct admin_s *)list_get(list, 0))->name);
