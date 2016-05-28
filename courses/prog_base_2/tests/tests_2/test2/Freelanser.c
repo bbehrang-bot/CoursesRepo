@@ -86,8 +86,8 @@ int teacher_salary_get(teacher_t * self)
     return self->salary;
 }
 void teacher_print(teacher_t * st) {
-    printf("ID: %i\nName: %s\nSurname: %s\nSalary: %f\nAge: %i\nDate: %s\n\n",
-        st->id,st->name, st->surname, st->salary, st->age, st->date);
+    //printf("ID: %i\nName: %s\nSurname: %s\nSalary: %f\nAge: %i\nDate: %s\n\n",
+//        st->id,st->name, st->surname, st->salary, st->age, st->date);
 }
 
 void teacher_printList(teacher_t * arr, int len) {

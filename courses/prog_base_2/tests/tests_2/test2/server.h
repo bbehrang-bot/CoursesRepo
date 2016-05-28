@@ -17,7 +17,7 @@ typedef struct {
     int formLength;
 } http_request_t;
 
-void server_answer(http_request_t, socket_t *,teacher_t **);
+void server_answer(http_request_t, socket_t *,teacher_t **,char *);
 void server_GET_all(http_request_t, socket_t *,teacher_t**);
 void server_GET_id(http_request_t,socket_t *t,teacher_t**);
 void server_DELETE_all(http_request_t,socket_t *,teacher_t**);

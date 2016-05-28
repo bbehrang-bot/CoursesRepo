@@ -8,6 +8,7 @@
 #include "socket.h"
 #include "Freelanser.h"
 #include "teacher.h"
+#include "Database.h"
 teacher teachers[1];
 void fill_teach(){
 int p = teacher_fillArray(1,teachers);
@@ -16,7 +17,7 @@ void server_doShit(http_request_t req, socket_t * clientSocket)
 {
 
 }
-void server_answer(http_request_t req, socket_t * clientSocket,teacher_t ** freelanser)
+void server_answer(http_request_t req, socket_t * clientSocket,teacher_t ** freelanser,char * myJ)
 {
     puts(req.method);
     puts(req.uri);
@@ -26,20 +27,44 @@ void server_answer(http_request_t req, socket_t * clientSocket,teacher_t ** free
     }
     else if(!strcmp(req.uri, "/info"))
     {
-        if (strcmp(req.method, "GET") == 0) {
-        char buffer[10240];
-		char * teachersJSON = teacher_parseAllToJSON(teachers, 1);
-		sprintf(buffer,
-			"HTTP/1.1 200 OK\n"
-			"Content-Type: application/json\n"
-			"Content-Length: %zu\n"
-			"Connection: keep-alive\n"
-			"\n%s", strlen(teachersJSON), teachersJSON);
-			char * p;
-			strcpy(p,teachersJSON);
-			 socket_write_string(clientSocket,p);
-		free(teachersJSON);
-	}
+
+	 char homeBuf[1024];
+
+    cJSON * jInfo = cJSON_CreateObject();
+    cJSON_AddItemToObject(jInfo, "student", cJSON_CreateString("Behrang Behvandi"));
+    cJSON_AddItemToObject(jInfo, "group", cJSON_CreateString("KP-51"));
+    cJSON_AddItemToObject(jInfo, "variant", cJSON_CreateNumber(9));
+    char * pageText = cJSON_Print(jInfo);
+
+    sprintf(homeBuf,
+            "HTTP/1.1 404 \n"
+            "Content-Type: text/html/application/json\n"
+            "Content-Length: %zu\n"
+            "\n%s", strlen(pageText), pageText);
+
+    socket_write_string(clientSocket,homeBuf);
+    }
+
+    else if(!strcmp(req.uri, "/external"))
+    {
+    char buf[10000];
+    sprintf(buf,"\nHTTP1.1 200 OK\n"
+    "Content-Type: application/json\n"
+    "Content-Length: %i\r\n\r\n"
+    "%s\n",strlen(myJ),myJ);
+    socket_write_string(clientSocket,buf);
+    }
+     else if(!strcmp(req.uri, "/database"))
+    {
+      const char * dbFile = "database.db";
+        teacher_t LancerList[100];
+        teacher_t newLancer;
+
+    db_t * db = db_new(dbFile);
+
+    db_getAll(db, LancerList, 100);
+    db_free(db);
+
     }
     else
     if (!strcmp(req.uri, "/teacher/api"))

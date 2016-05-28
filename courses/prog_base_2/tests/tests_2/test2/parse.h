@@ -5,7 +5,7 @@
 #include <libxml/tree.h>
 #include "Freelanser.h"
 
-void parse(teacher_t ** teacherArray);
-
+void parse(teacher_t ** teacherArray,char * fileName);
+void parseTest(teacher_t ** teacherArray,char * fileName);
 
 #endif

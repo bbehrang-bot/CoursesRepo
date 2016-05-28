@@ -11,7 +11,7 @@ typedef struct teacher_s {
     int age;
    // char date[10];
     char bookName[256];
-   struct tm date;
+   char  time[9];
 } teacher_t;
 
 teacher_t * teacher_new(void);

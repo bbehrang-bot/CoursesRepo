@@ -34,7 +34,7 @@ void db_insertLancer(db_t * self, teacher_t * Lancer) {
     sqlite3_bind_text(stmt, 2,Lancer->surname,strlen(Lancer->surname),SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, 3, Lancer->age);
     sqlite3_bind_double(stmt, 4, Lancer->salary);
-    sqlite3_bind_text(stmt, 5,Lancer->date,strlen(Lancer->date),SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 5,Lancer->time,strlen(Lancer->time),SQLITE_TRANSIENT);
     int rc = sqlite3_step(stmt);
 
     if (SQLITE_ERROR == rc) {
@@ -68,12 +68,12 @@ teacher_t * db_getLancerById(db_t * self, int id) {
 
 void db_updateLancer(db_t * self, teacher_t * newLancer,int id) {
     sqlite3_stmt * stmt = NULL;
-    sqlite3_prepare_v2(self->db, "UPDATE database SET Name = ?, Surname = ?, age = ?, salary = ?, date = ? WHERE id = ?;", -1, &stmt, 0);
+    sqlite3_prepare_v2(self->db, "UPDATE database SET Name = ?, Surname = ?, age = ?, salary = ?, time = ? WHERE id = ?;", -1, &stmt, 0);
     sqlite3_bind_text(stmt, 1,newLancer->name, strlen(newLancer->name),SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 2,newLancer->surname,strlen(newLancer->surname),SQLITE_TRANSIENT);
     sqlite3_bind_int(stmt, 3, newLancer->age);
     sqlite3_bind_double(stmt, 4, newLancer->salary);
-    sqlite3_bind_text(stmt, 5,newLancer->date,strlen(newLancer->date),SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 5,newLancer->time,strlen(newLancer->time),SQLITE_TRANSIENT);
 
     sqlite3_bind_int(stmt, 6, id);
 
@@ -117,13 +117,13 @@ void _fillLancer(sqlite3_stmt * stmt, teacher_t * st) {
     const unsigned char * surname = sqlite3_column_text(stmt, 1);
     double salary = sqlite3_column_double(stmt, 3);
     int age = sqlite3_column_int(stmt, 2);
-    const unsigned char * date = sqlite3_column_text(stmt, 4);
+    const unsigned char * time = sqlite3_column_text(stmt, 4);
     st->id = id;
     strcpy(st->name, (const char *)name);
     strcpy(st->surname, (const char *)surname);
     st->salary  = salary ;
     st->age = age;
-    strcpy(st->date, (const char *)date);
+    strcpy(st->time, (const char *)time);
 }
 void db_getAll(db_t *self, teacher_t * arr, int arrMax)
 {
