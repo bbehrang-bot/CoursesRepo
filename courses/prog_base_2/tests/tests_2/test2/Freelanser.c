@@ -16,12 +16,12 @@ teacher_t * teacher_new(void) {
     teacher_t * newLanc=malloc(sizeof(struct teacher_s));
     strcpy(newLanc->name,"");
     //newLanc->name=NULL;
-    strcpy(newLanc->surname,"");
+    //strcpy(newLanc->surname,"");
     //newLanc->surname=NULL;
-    newLanc->age=0;
-    strcpy(newLanc->date,"");
+    //newLanc->age=0;
+    //strcpy(newLanc->date,"");
    // newLanc->date=NULL;
-    newLanc->salary=0;
+   // newLanc->salary=0;
     return newLanc;
 }
 
@@ -69,10 +69,10 @@ char * teacher_surname_get(teacher_t * self)
     return self->surname;
 }
 
-char * teacher_date_get(teacher_t * self)
+/*char * teacher_date_get(teacher_t * self)
 {
     return self->date;
-}
+}*/
 
 double teacher_age_get(teacher_t * self)
 {
@@ -103,6 +103,6 @@ void teacher_set(teacher_t * self, char * name, char * surname, int age,float sa
     strcpy(self->surname, (const char *)surname);
     self->age=age;
     self->salary=salary;
-    strcpy(self->date, (const char *)date);
+//    strcpy(self->date, (const char *)date);
 
 }

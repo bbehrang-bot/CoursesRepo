@@ -107,7 +107,7 @@ char * lanser_toJSON(teacher_t * self)
     cJSON_AddItemToObject(SM, "name", cJSON_CreateString(teacher_name_get(self)));
     cJSON_AddItemToObject(SM, "surname", cJSON_CreateString(teacher_surname_get(self)));
     cJSON_AddItemToObject(SM, "age", cJSON_CreateNumber(teacher_age_get(self)));
-    cJSON_AddItemToObject(SM, "date", cJSON_CreateString(teacher_date_get(self)));
+    //cJSON_AddItemToObject(SM, "date", cJSON_CreateString(teacher_date_get(self)));
     cJSON_AddItemToObject(SM, "salary", cJSON_CreateNumber(teacher_salary_get(self)));
     char * jsonSM = cJSON_Print(SM);
     return jsonSM;
@@ -400,7 +400,7 @@ void server_GET_id_html(http_request_t req,socket_t* clientSocket,teacher_t ** f
             teacher_name_get(freelancer[id]),
             teacher_surname_get(freelancer[id]),
             teacher_age_get(freelancer[id]),
-            teacher_date_get(freelancer[id]),
+            //teacher_date_get(freelancer[id]),
             teacher_salary_get(freelancer[id])
            );
     strcat(buf,text);

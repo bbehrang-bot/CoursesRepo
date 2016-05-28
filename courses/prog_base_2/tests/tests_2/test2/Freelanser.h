@@ -1,6 +1,6 @@
 #ifndef FREELANSER_H_INCLUDED
 #define FREELANSER_H_INCLUDED
-
+#include <time.h>
 //typedef struct teacher_s teacher_t;
 
 typedef struct teacher_s {
@@ -9,7 +9,9 @@ typedef struct teacher_s {
     char surname[256];
     float salary;
     int age;
-    char date[10];
+   // char date[10];
+    char bookName[256];
+   struct tm date;
 } teacher_t;
 
 teacher_t * teacher_new(void);
