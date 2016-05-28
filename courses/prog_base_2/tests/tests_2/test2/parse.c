@@ -8,7 +8,7 @@ void parse(teacher_t ** teacherArray,char * fileName)
     FILE * file = fopen(fileName, "r");
     char text[10000];
     char line[100];
-
+    strcpy(text,"");
     while(fgets(line, 100, file) != NULL)
     {
         strcat(text, line);
