@@ -9,7 +9,7 @@ typedef struct teacher_s {
     char surname[256];
     float salary;
     int age;
-   // char date[10];
+   char date[10];
     char bookName[256];
    char  time[9];
 } teacher_t;

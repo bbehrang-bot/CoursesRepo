@@ -242,7 +242,6 @@ int main() {
 
     lib_free();
 
-
 /*
     const char * dbFile = "database.db";
     teacher_t LancerList[100];
@@ -254,9 +253,9 @@ int main() {
 
     db_getAll(db, LancerList, 100);
 
-    /*db_insertLancer(db, &newLancer);//Already insert
+    db_insertLancer(db, &newLancer);//Already insert
     db_updateLancer(db,&newLancer,3);
-    //db_deleteLancer(db,2);//Already deleted
+    db_deleteLancer(db,2);//Already deleted
 
     db_getAll(db, LancerList, 100);
 

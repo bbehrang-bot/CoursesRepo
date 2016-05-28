@@ -8,15 +8,39 @@
 #include "socket.h"
 #include "Freelanser.h"
 #include "teacher.h"
-#include "Database.h"
+#include "Databse.h"
+#include "list.h"
 teacher teachers[1];
+void server_database(socket_t * client) {
+	char strbuf[10240] = "";
+	char buf[1000];/*
+	FILE * file = fopen("Untitled1.xml", "r");
+	while(fgets(buf, 1000, file) != NULL)
+	{
+		strcat(strbuf, buf);
+		puts(buf);
+	}
+	*/
+	db_t * db = db_new("admin.db");
+	list_t list = database_to_list(db);
+	puts(((struct admin_s *)list_get(list, 0))->name);
+	char * text = list_to_xml1(list);
+	sprintf(strbuf,
+		"HTTP/1.1 200 OK\n"
+		"Content-Type: text/xml\n"
+		"Content-Length: %u\n"
+		"Connection: keep-alive\n"
+		"\n%s", strlen(text), text);
+	//free(allStudentsJson);
+	free (text);
+	//fclose(file);
+    socket_write_string(client, strbuf);
+    socket_close(client);
+}
 void fill_teach(){
 int p = teacher_fillArray(1,teachers);
 }
-void server_doShit(http_request_t req, socket_t * clientSocket)
-{
 
-}
 void server_answer(http_request_t req, socket_t * clientSocket,teacher_t ** freelanser,char * myJ)
 {
     puts(req.method);
@@ -56,15 +80,7 @@ void server_answer(http_request_t req, socket_t * clientSocket,teacher_t ** free
     }
      else if(!strcmp(req.uri, "/database"))
     {
-      const char * dbFile = "database.db";
-        teacher_t LancerList[100];
-        teacher_t newLancer;
-
-    db_t * db = db_new(dbFile);
-
-    db_getAll(db, LancerList, 100);
-    db_free(db);
-
+        server_database(clientSocket);
     }
     else
     if (!strcmp(req.uri, "/teacher/api"))

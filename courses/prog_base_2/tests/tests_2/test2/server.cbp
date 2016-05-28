@@ -53,15 +53,22 @@
 		<Unit filename="Database.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Database.h" />
+		<Unit filename="Databse.h" />
 		<Unit filename="Freelanser.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Freelanser.h" />
+		<Unit filename="bb.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="cJSON.h" />
+		<Unit filename="list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="list.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -87,6 +94,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="teacher_json.h" />
+		<Unit filename="xml.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
