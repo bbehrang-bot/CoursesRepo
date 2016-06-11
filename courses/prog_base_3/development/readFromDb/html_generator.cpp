@@ -55,7 +55,7 @@ std::wstring html_generator::html_render_body(std::wstring body,Company company)
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"header_operations\">");
 	html_out += U("					 <div class=\"header_search  header_ops\"><a href=\"#\" title=\"Search\"></a></div>");
-	html_out += U("					 <div class=\"header_contact header_ops\"><a href=\"#\" title=\"Basket\"></a></div>");
+	html_out += U("					 <div class=\"header_basket header_ops\"><a href=\"http://localhost:8090/Basket\" title=\"Basket\"></a></div>");
 	html_out += U("              </div>");
 	html_out += U("          </div>");
 	html_out += U("          <div class=\"navigation\">");
@@ -151,6 +151,13 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	std::string productImageUrl = product.Product_getImageUrl();
 	std::wstring pImageUrl = std::wstring(productImageUrl.begin(), productImageUrl.end());
 
+
+	int id = product.Product_getId();
+	std::string id_str = std::to_string(id);
+	std::string link = "http://localhost:8090/Products/AddToBasket/";
+	link.append(id_str);
+	std::wstring wLink = std::wstring(link.begin(), link.end());
+
 	int productInStock = product.Product_getInStock();
 	html_out += U("			<div class=\"product-detail-wrapper\">");
 	html_out += U("				<div class=\"product-detail-frame\">");
@@ -162,13 +169,16 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	html_out += U("							<span class=\"pdName\">") + pName + U("</span>");
 	html_out += U("						</div>");
 	html_out += U("						<div class=\"product-detail-price\">");
-	html_out += U("							<span class=\"pdPrice\">") + pPrice + U("€</span>");
+	html_out += U("							<span class=\"pdPrice\">€ ") + pPrice + U("</span>");
 	html_out += U("						</div>");
 	html_out += U("						<div class=\"product-detail-info\">");
 	html_out += U("							<p>") + pDes + U("</p>");
 	html_out += U("						</div>");
+	html_out += U("						<script>");
+	html_out += U("									function addToBasket(){var xhttp = new XMLHttpRequest();xhttp.open('POST','") + wLink + U("',true);xhttp.send()}");
+	html_out += U("						</script>");
 	html_out += U("						<div class=\"order\">");
-	html_out += U("							<a href = \"#\" title=\"Add to Basket\">Add To Basket</a>");
+	html_out += U("							<a  onclick=\"addToBasket()\" title=\"Add to Basket\">Add To Basket</a>");
 	html_out += U("						</div>");
 
 	html_out += U("					</div>");
@@ -176,6 +186,67 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	html_out += U("			</div>");
 	return html_out;
 
+}
+std::wstring html_generator::html_basketPage(Product product,int count)
+{
+	std::wstring html_out;
+	std::string productName = product.Product_getName();
+	std::wstring pName = std::wstring(productName.begin(), productName.end());
+
+	float productPrice = product.Product_getPrice();
+	std::string pPriceStr = std::to_string(productPrice);
+	std::string pPriceStrSub = pPriceStr.substr(0, 6);
+	std::wstring pPrice = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+
+	float ptimesCount = productPrice * count;
+	pPriceStr = std::to_string(ptimesCount);
+	pPriceStrSub = pPriceStr.substr(0, 6);
+	std::wstring pPriceCount = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+
+
+
+	std::string productDescription = product.Product_getDescription();
+	std::wstring pDes = std::wstring(productDescription.begin(), productDescription.end());
+
+	std::string productImageUrl = product.Product_getImageUrl();
+	std::wstring pImageUrl = std::wstring(productImageUrl.begin(), productImageUrl.end());
+
+	std::string countStr = std::to_string(count);
+	std::wstring count_wstr = std::wstring(countStr.begin(), countStr.end());
+	int productInStock = product.Product_getInStock();
+
+	int id = product.Product_getId();
+	std::string id_str = std::to_string(id);
+	std::string link = "http://localhost:8090/Products/DeleteFromBasket/";
+	link.append(id_str);
+	std::wstring wLink = std::wstring(link.begin(), link.end());
+
+	html_out += U("			<div class=\"orders\">");
+	html_out += U("				<div class=\"ordersImage\">");
+	html_out += U("					<img src='") + pImageUrl + U("'>");
+	html_out += U("				</div>");
+	html_out += U("				<script>");
+	html_out += U("							function deleteFromBasket(){var xhttp = new XMLHttpRequest();xhttp.open('DELETE','") + wLink + U("',true);xhttp.send()}");
+	html_out += U("				</script>");
+	html_out += U("				<div class=\"ordersRemove\">");
+	html_out += U("					<a title=\"Remove\" onclick=\"deleteFromBasket()\"></a>");
+	html_out += U("				</div>");
+	html_out += U("				<div class=\"orderCount\">");
+	html_out += U("					<div class=\"orderInfoframe\">");
+	html_out += U("						<span class=\"countLabes\">Total items :</span><span class=\"countValues\">") + count_wstr +U("</span>");
+	html_out += U("					</div>");
+	html_out += U("					<div class=\"orderInfoframe\">");
+	html_out += U("						<span class=\"countLabes\">Total sum of this item :</span><span class=\"countValues\">") + pPriceCount + U("</span>");
+	html_out += U("					</div>");
+	html_out += U("				</div>");
+	html_out += U("				<div class=\"ordersName\">");
+	html_out += U("					<span>") + pName + U("</span>");
+	html_out += U("				</div>");
+	html_out += U("				<div class=\"ordersPrice\">");
+	html_out += U("					<span>€ ") + pPrice + U(" For each unit</span>");
+	html_out += U("				</div>");
+	html_out += U("			</div>");
+	return html_out;
 }
 std::wstring html_generator::html_homePage(Company company)
 {
@@ -220,7 +291,7 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"header_operations\">");
 	html_out += U("					 <div class=\"header_search  header_ops\"><a href=\"#\" title=\"Search\"></a></div>");
-	html_out += U("					 <div class=\"header_contact header_ops\"><a href=\"#\" title=\"Basket\"></a></div>");
+	html_out += U("					 <div class=\"header_basket header_ops\"><a href=\"http://localhost:8090/Basket\" title=\"Basket\"></a></div>");
 	html_out += U("              </div>");
 	html_out += U("          </div>");
 	html_out += U("          <div class=\"navigation\">");

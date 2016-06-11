@@ -335,6 +335,7 @@ p,a,h1,h2,h3,span{
 .product-wrapper{
     width:100%;
     height: 700px;
+    padding-bottom:2em;
 }
 .product-frame{
     width: 30%;
@@ -458,10 +459,151 @@ font-family: "Aileron light";
     text-align: center;
     line-height: 4em;
     height: 70px;
+    cursor: pointer;
 }
 .order a{
+    display:block;
+    width:100%;
+    height:100%;
     font-family: "alien league II";
     font-size: 2.5em;
+    font-style: italic;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+    
+}
+.orderFrame{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.orders{
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    margin-top : 2em;
+    border-bottom: 1px solid #ECECEC;
+}
+.ordersName{
+    width: 50%;
+    height: 50%;
+    float: left;
+    clear:left;
+      overflow: hidden;
+}
+.ordersName span{
+     font-family: "alien league II";
+    font-size: 2em;
+    font-style: italic;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+    
+}
+.ordersPrice{
+    width: 50%;
+    height: 50%;
+    float: left;
+    clear:left;
+    overflow: hidden;
+}
+.ordersPrice span{
+     font-family: "alien league II";
+    font-size: 2em;
+    font-style: italic;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+    
+}
+.ordersImage{
+    width: 20%;
+    height: 100%;
+    float: right;
+}
+.ordersImage img{
+    max-width: 100%;
+    max-height: 100%;
+    float: right;
+}
+.ordersRemove{
+    width: 30px;
+    float: right;
+    margin-top: 10px;
+    text-align: center;
+    height: 30px;
+    background-image: url(http://i.imgur.com/iarQ5sR.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    cursor : pointer;
+    
+}
+.ordersRemove a{
+   display: block;
+    width:100%;
+    height: 100%;
+    color: #333333;
+    
+}
+.ordersPlace{
+    width: 250px;
+    height: 60px;
+    border: 1px solid #ECECEC;
+    margin: 30px auto;
+    text-align: center;
+    line-height: 60px;
+    cursor : pointer;
+}
+.ordersPlace a{
+   display: block;
+    width:100%;
+    height: 100%;
+    color: #636363;
+     font-family: "alien league II";
+    font-size: 2em;
+    font-style: italic;
+    
+}
+.psubinfo {
+    font-family: "alien league II" !important;
+    font-size: 0.7em !important;
+    font-style: italic !important;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #ECECEC !important;
+    
+}
+.orderCount{
+    width: 27%;
+    height: 100%;
+    float: right;
+
+    
+}
+.countLabes{
+display: block;
+    width: 70%;
+    float: left;
+    font-family: "alien league II";
+    font-size: 2em;
+    font-style: italic;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+    
+}
+.orderInfoframe{
+    width: 99%;
+    margin: auto;
+    height: 50%;
+}
+.countValues{
+   display: block;
+    width: 30%;
+    float: right;
+    font-family: "alien league II";
+    font-size: 2em;
     font-style: italic;
     /* font-weight: bold; */
     letter-spacing: 0.2em;
