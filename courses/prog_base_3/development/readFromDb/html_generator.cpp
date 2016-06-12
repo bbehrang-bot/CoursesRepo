@@ -236,14 +236,14 @@ std::wstring html_generator::html_basketPage(Product product,int count)
 	html_out += U("						<span class=\"countLabes\">Total items :</span><span class=\"countValues\">") + count_wstr +U("</span>");
 	html_out += U("					</div>");
 	html_out += U("					<div class=\"orderInfoframe\">");
-	html_out += U("						<span class=\"countLabes\">Total sum of this item :</span><span class=\"countValues\">") + pPriceCount + U("</span>");
+	html_out += U("						<span class=\"countLabes\">Total sum :</span><span class=\"countValues\">€ ") + pPriceCount + U("</span>");
 	html_out += U("					</div>");
 	html_out += U("				</div>");
 	html_out += U("				<div class=\"ordersName\">");
 	html_out += U("					<span>") + pName + U("</span>");
 	html_out += U("				</div>");
 	html_out += U("				<div class=\"ordersPrice\">");
-	html_out += U("					<span>€ ") + pPrice + U(" For each unit</span>");
+	html_out += U("					<span>€ ") + pPrice + U("<span class=\"psubinfo\">for each unit</span></span>");
 	html_out += U("				</div>");
 	html_out += U("			</div>");
 	return html_out;
@@ -373,7 +373,6 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += U("	</html>");
 	return html_out;
 }
-
 std::wstring html_generator::table_list_html(const std::vector<std::string>& table_names)
 {
 	std::wstring html_out;

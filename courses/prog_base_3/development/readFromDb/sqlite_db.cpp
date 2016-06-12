@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "sqlite_db.h"
 #include "string.h"
+#include <time.h>
+#include <ctime>;
 
 std::vector<std::vector<std::pair<std::string, std::string>>> sqlite_db::tmp_sql_results;
 bool is_number(const std::string& s)
@@ -233,4 +235,77 @@ Company sqlite_db::db_getCompany()
 
 	sqlite3_finalize(stmt);
 	return company;
+}
+int  sqlite_db::db_placeOrderTable()
+{
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
+	//
+	sqlite3_stmt * stmt = NULL;
+	char * sqlQuery = "INSERT INTO OrderTable ('Date') VALUES (?);";
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+
+	sqlite3_bind_text(stmt, 1, buffer, -1, SQLITE_STATIC);
+	int rc = sqlite3_step(stmt);
+	if (rc == SQLITE_ERROR)
+	{
+		puts("ERROR : Order");
+		return -1;
+	}
+	else
+	{
+		int addedId = sqlite3_column_int(stmt, 0);
+		sqlite3_finalize(stmt);
+		return rc;
+	}
+
+}
+int sqlite_db::db_orderTableId()
+{
+	sqlite3_stmt * stmt = NULL;
+	char * sqlQuery = "SELECT * FROM OrderTable ORDER BY ID DESC LIMIT 1;";
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+
+	int rc = sqlite3_step(stmt);
+	if (rc == SQLITE_ERROR)
+	{
+		puts("ERROR : Order");
+		return -1;
+	}
+	else
+	{
+		int addedId = sqlite3_column_int(stmt, 0);
+		sqlite3_finalize(stmt);
+		return addedId;
+	}
+}
+int sqlite_db::db_placeOrder(Product product, int count,int orderTableId)
+{
+	int rc = -1;
+	for (int i = 1; i <= count;i++)
+	{
+		sqlite3_stmt * stmt = NULL;
+		char * sqlQuery = "INSERT INTO OrderProductBridge ('OProductId','OOrderId') VALUES (?,?);";
+		int productId = product.Product_getId();
+		sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+		sqlite3_bind_int(stmt, 1, productId);
+		sqlite3_bind_int(stmt, 2, orderTableId);
+
+
+	     rc = sqlite3_step(stmt);
+		if (rc == SQLITE_ERROR)
+		{
+			puts("ERROR : Order");
+			return -1;
+		}
+		else
+		{
+			sqlite3_finalize(stmt);
+		}
+	}
+	return rc;
 }

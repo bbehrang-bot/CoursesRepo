@@ -67,7 +67,6 @@ void product_page_responser(http_request request) {
 	html_generator html_gen("http://localhost:8090");
 	std::vector<int> pIds = db.db_getIds();
 	int vecSize = pIds.size();
-	
 	std::wstring out;
 	if (path.size() == 1) {
 		std::wstring htmlBody;
@@ -115,15 +114,7 @@ void basket_page_responser(http_request request) {
 	Company company = db.db_getCompany();
 	std::vector<Product> products = basket.Basket_getItems();
 	std::vector<int> counts = basket.Basket_getCounts();
-	int basketSize = products.size();
-	std::vector<int> pIds(basketSize);
-	std::vector<int> pCounts(basketSize);
-	for (int i = 0; i < basketSize; i++)
-	{
-		pIds.push_back(products.at(i).Product_getId());
-		pCounts.push_back(products.at(i).Product_getId());
-	}
-		
+	int basketSize = products.size();	
 	std::wstring out;
 	std::wstring htmlBody;
 	for (int i = 0; i < basketSize; i++)
@@ -132,12 +123,47 @@ void basket_page_responser(http_request request) {
 		int count = counts.at(i);
 		htmlBody += html_gen.html_basketPage(product, count);
 	}
+	std::string link = "http://localhost:8090/Basket/PlaceOrder/";
+	std::wstring wLink = std::wstring(link.begin(), link.end());
 	std::wstring btnPlace;
-	btnPlace = U(" <div class=\"ordersPlace\">");
-	btnPlace += U("<a  title=\"Place Order\">Place Order</a>");
+	btnPlace = U("	<script>");
+	btnPlace += U("		function placeOrder(){var xhttp = new XMLHttpRequest();xhttp.open('POST','") + wLink + U("',true);xhttp.send()}");
+	btnPlace += U("	</script>");
+	btnPlace += U(" <div class=\"ordersPlace\">");
+	btnPlace += U("<a  title=\"Place Order\" onclick=\"placeOrder()\">Place Order</a>");
 	btnPlace += U(" </div>");
 	htmlBody += btnPlace;
 	out = html_gen.html_render_body(htmlBody, company);
+	http_response response(status_codes::OK);
+	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
+	response.set_body(out);
+	request.reply(response);
+}
+void order_page_responser(http_request request) {
+	puts("IN ORDER");
+	auto http_get_vars = uri::split_query(request.request_uri().query());
+	auto path = uri::split_path(request.request_uri().path());
+	html_generator html_gen("http://localhost:8090");
+	Company company = db.db_getCompany();
+	std::vector<Product> products = basket.Basket_getItems();
+	std::vector<int> counts = basket.Basket_getCounts();
+	int basketSize = products.size();
+	std::vector<int> pIds(basketSize);
+	std::vector<int> pCounts(basketSize);
+	int rc = db.db_placeOrderTable();
+	if (rc == -1)
+		return;
+	int orderTableId = db.db_orderTableId();
+	if (orderTableId == -1)
+		return;
+	for (int i = 0; i < basketSize; i++)
+	{
+		Product product = products.at(i);
+		int count = counts.at(i);
+		
+		db.db_placeOrder(product, count, orderTableId);
+	}
+	std::wstring out;
 	http_response response(status_codes::OK);
 	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
 	response.set_body(out);
@@ -170,6 +196,12 @@ void server_start()
 				return;
 
 			}
+			else if (path.at(0) == U("Admin"))
+			{
+				table_page_responser(request);
+				return;
+
+			}
 		}
 		main_page_responser(request);
 	});
@@ -187,6 +219,12 @@ void server_start()
 			{
 				product_page_responser(request);
 				return;
+			}
+			else if (path.at(0) == U("Basket"))
+			{
+				order_page_responser(request);
+				return;
+
 			}
 			
 		}

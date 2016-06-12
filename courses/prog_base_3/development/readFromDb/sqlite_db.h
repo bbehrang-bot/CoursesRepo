@@ -31,4 +31,7 @@ public:
 	Product sqlite_db::db_get_product(int id);
 	std::vector<int> db_getIds();
 	Company db_getCompany();
+	int db_placeOrderTable();
+	int db_orderTableId();
+	int db_placeOrder(Product product, int count, int orderTableId);
 };
