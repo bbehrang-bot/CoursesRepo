@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include "Product.h"
+#include <algorithm>
 class sqlite_db {
 private:
 	sqlite3 *db;

@@ -32,7 +32,21 @@ void sqlite_db::close()
 {
 	sqlite3_close(db);
 }
-
+std::string replaceAll(std::string const& original, std::string const& from, std::string const& to)
+{
+	std::string results;
+	std::string::const_iterator end = original.end();
+	std::string::const_iterator current = original.begin();
+	std::string::const_iterator next = std::search(current, end, from.begin(), from.end());
+	while (next != end) {
+		results.append(current, next);
+		results.append(to);
+		current = next + from.size();
+		next = std::search(current, end, from.begin(), from.end());
+	}
+	results.append(current, next);
+	return results;
+}
 
 
 int sqlite_db::get_all_table_names(std::vector<std::string>& table_names)
@@ -103,8 +117,12 @@ int sqlite_db::insert_row_into_table(std::string table_name, std::map<std::wstri
 	sql_query += ") VALUES (";
 	int p = 0;
 	for (auto rw : row_data) {
-		
-			sql_query += "'" + std::string(rw.second.begin(), rw.second.end()) + "',";
+			std::string c = std::string(rw.second.begin(), rw.second.end());
+			c = replaceAll(c, "+", " ");
+			c = replaceAll(c, "%3A", ":");
+			c = replaceAll(c, "%2F", "/");
+			std::cout << c;
+			sql_query += "'" + c + "',";
 		
 	}
 	sql_query.pop_back();
@@ -131,7 +149,13 @@ int sqlite_db::edit_row_into_table(std::string table_name, std::string row_id, s
 	for (auto rw : row_data) {
 		sql_query += std::string(rw.first.begin(), rw.first.end());
 		sql_query += " = ";
-		sql_query += "'" + std::string(rw.second.begin(), rw.second.end()) + "',";
+		std::string c = std::string(rw.second.begin(), rw.second.end());
+		c = replaceAll(c, "+", " ");
+		c = replaceAll(c, "%3A", ":");
+		c = replaceAll(c, "%2F", "/");
+		std::cout << c;
+		puts("");
+		sql_query += "'" + c + "',";
 		}
 	sql_query.pop_back();
 	sql_query += " WHERE id = " + row_id + ";";

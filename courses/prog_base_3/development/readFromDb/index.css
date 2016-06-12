@@ -611,3 +611,41 @@ display: block;
     color: #333333;
     
 }
+.listTable{
+       margin: 20px auto;
+    border: 1px solid #ECECEC;
+    min-height: 200px;
+    width: 80%;
+    text-align: center;
+    padding:50px;
+    font-family: "aileron light";
+}
+.tableTitle{
+    
+        width: 100%;
+    height: 50px;
+    font-family: "alien league";
+    font-size: 3em;
+}
+.TableListRows{
+     margin-top: 50px;
+    height: 100%;
+    width: 100%;
+}
+.tableListRow{
+    width: 100%;
+    height: 80px;
+}
+.tValues{
+    
+    display: block;
+    width: 100%;
+    height: 100%;
+    float: right;
+    font-family: "alien league II";
+    font-size: 2em;
+    font-style: italic;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+}

@@ -27,6 +27,8 @@ public:
 	std::wstring html_productPage(Product product);
 	std::wstring html_productDetailPage(Product product);
 	std::wstring html_basketPage(Product product,int count);
+	//
+	std::wstring html_tableListHtml();
 private:
 	std::string find_id(std::vector<std::pair<std::string, std::string>> row_data);
 };

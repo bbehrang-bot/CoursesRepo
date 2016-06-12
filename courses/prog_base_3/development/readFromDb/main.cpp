@@ -28,18 +28,41 @@ void main_page_responser(http_request request) {
 	response.set_body(html_gen.html_homePage(company));
 	request.reply(response);
 }
+void admin_page_responser(http_request request) {
+	std::vector<std::string> table_names;
+	html_generator html_gen("http://localhost:8090");
+	http_response response(status_codes::OK);
+	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
+	response.set_body(html_gen.html_tableListHtml());
+	request.reply(response);
+}
 void table_page_responser(http_request request) {
 	auto http_get_vars = uri::split_query(request.request_uri().query());
 	auto path = uri::split_path(request.request_uri().path());
+	std::string table_name;
+	if (path.at(1) == U("Products") || path.at(1) == U("ProductTable"))
+	{
+		table_name = "ProductTable";
+	}
+	else if (path.at(1) == U("Orders") || path.at(1) == U("OrderTable"))
+	{
+		table_name = "OrderTable";
+	}
+	else if (path.at(1) == U("Company"))
+	{
+		table_name = "Company";
+	}
 
-	std::string table_name = std::string(path.at(1).begin(), path.at(1).end());
+	
 
-	if (path.size() == 4) {
+	if (path.size() >= 3) {
+		puts("IN PATH 3");
 		if (path.at(2) == U("delete")) {
 			std::string id = std::string(path.at(3).begin(), path.at(3).end());
 			db.delete_table_row(table_name, id);
 		}
 		if (path.at(2) == U("edit")) {
+			puts("in edit");
 			std::string id = std::string(path.at(3).begin(), path.at(3).end());
 			db.edit_row_into_table(table_name, id, http_get_vars);
 		}
@@ -198,7 +221,20 @@ void server_start()
 			}
 			else if (path.at(0) == U("Admin"))
 			{
-				table_page_responser(request);
+				if (path.size() == 1)
+				{
+					admin_page_responser(request);
+					return;
+				}
+				else
+				{
+					table_page_responser(request);
+					return;
+				}	
+			}
+			else if (path.at(0) == U("Contact"))
+			{
+				contact_page_responser(request);
 				return;
 
 			}
@@ -207,12 +243,11 @@ void server_start()
 	});
 	listener.support(methods::POST, [](http_request request)
 	{
-		puts("in post");
 		auto http_get_vars = uri::split_query(request.request_uri().query());
 		auto path = uri::split_path(request.request_uri().path());
-
 		std::string uri = std::string(request.request_uri().path().begin(), request.request_uri().path().end());
 
+		std::cout << uri;
 		if (path.size() >= 1) {
 
 			if (path.at(0) == U("Products"))
@@ -226,13 +261,13 @@ void server_start()
 				return;
 
 			}
+
 			
 		}
 		main_page_responser(request);
 	});
 	listener.support(methods::DEL, [](http_request request)
 	{
-		puts("in Delete");
 		auto http_get_vars = uri::split_query(request.request_uri().query());
 		auto path = uri::split_path(request.request_uri().path());
 
@@ -244,6 +279,20 @@ void server_start()
 			{
 				product_page_responser(request);
 				return;
+			}
+			else if (path.at(0) == U("Admin"))
+			{
+				if (path.size() == 1)
+				{
+					admin_page_responser(request);
+					return;
+				}
+				else
+				{
+					table_page_responser(request);
+					return;
+
+				}
 			}
 
 		}
