@@ -29,6 +29,7 @@ public:
 	std::wstring html_basketPage(Product product,int count);
 	std::wstring html_buyForm(double price,int count);
 	std::wstring html_ContactPage();
+	std::wstring html_AdminLoginPage();
 	std::wstring html_searchPage();
 	std::wstring html_Alert(std::string body);
 	std::wstring html_aboutFull(Company company);

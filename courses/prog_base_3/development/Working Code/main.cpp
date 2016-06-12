@@ -98,12 +98,52 @@ void contact_page_responser(http_request request) {
 	response.set_body(out);
 	request.reply(response);
 }
+void admin_login_responser(http_request request) {
+	auto postData = uri::split_query(request.extract_string().get());
+	auto http_get_vars = uri::split_query(request.request_uri().query());
+	auto path = uri::split_path(request.request_uri().path());
+	std::wstring html_out;
+	std::wstring out;
+	html_generator html_gen("http://localhost:8090");
+	html_out = html_gen.html_AdminLoginPage();
+	out = html_gen.html_render_body(html_out, company);
+
+	http_response response(status_codes::OK);
+	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
+	response.set_body(out);
+	request.reply(response);
+}
 void admin_page_responser(http_request request) {
+	auto postData = uri::split_query(request.extract_string().get());
+	std::string reqMethod = std::string(request.method().begin(),request.method().end());
+	if (reqMethod == "POST")
+	{
+		int admin = db.db_Admin(postData);
+		if (admin == 1)
+			isAdmin = true;
+		else
+		{
+			isAdmin = false;
+		}
+			
+	}
 	std::vector<std::string> table_names;
 	html_generator html_gen("http://localhost:8090");
 	http_response response(status_codes::OK);
 	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
-	response.set_body(html_gen.html_tableListHtml());
+	std::wstring html_out;
+	if(isAdmin == true)
+	{
+		html_out = html_gen.html_tableListHtml();
+	}
+	else
+	{
+		html_out = html_gen.html_Alert("Wrong username or password:(");
+		html_out = html_gen.html_render_body(html_out,company);
+	}
+	
+	
+	response.set_body(html_out);
 	request.reply(response);
 }
 void table_page_responser(http_request request) {
@@ -320,7 +360,7 @@ void server_start()
 				{
 					if(path.at(1) == U("Login"))
 					{ 
-						admin_login_responser();
+						admin_login_responser(request);
 					}
 					else
 					{ 

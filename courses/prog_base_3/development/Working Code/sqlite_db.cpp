@@ -250,7 +250,6 @@ std::vector<int> sqlite_db::db_getIds()
 	int size = db_getSize();
 	std::vector<int> arr(size);
 	char * sqlQuery = "SELECT Id FROM ProductTable;";
-	printf(" COUNT IS %d\n", size);
 	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
 	for (int i = 0; i < size; i++)
 	{
@@ -383,6 +382,41 @@ int sqlite_db::db_sendMsg(std::map<std::wstring, std::wstring> row_data)
 	}
 
 	return 1;
+}
+int sqlite_db::db_Admin(std::map<std::wstring, std::wstring> row_data)
+{
+	std::string user, pass;
+	int i = 1;
+	for (auto rw : row_data) {
+		if (i == 2)
+		{
+			user = std::string(rw.second.begin(), rw.second.end());
+			i++;
+		}
+		else if (i == 1)
+		{
+			pass = std::string(rw.second.begin(), rw.second.end());
+			i++;
+		}
+		else
+			break;
+	}
+	std::string query = "SELECT COUNT(*) FROM Admins WHERE username='" + user + "' AND password='" + pass +"';";
+	sqlite3_stmt * stmt = NULL;
+	char * sqlQuery = new char[query.length() + 1];
+	std::strcpy(sqlQuery, query.c_str());
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+	int rc = sqlite3_step(stmt);
+	if (rc == SQLITE_ERROR)
+	{
+		puts("Error : Select Count");
+		return -1;
+	}
+	int size = sqlite3_column_int(stmt, 0);
+	sqlite3_finalize(stmt);
+	free(sqlQuery);
+	return size;
+
 }
 Company sqlite_db::db_getCompany()
 {

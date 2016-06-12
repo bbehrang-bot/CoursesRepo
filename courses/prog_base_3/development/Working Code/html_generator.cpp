@@ -315,6 +315,18 @@ std::wstring html_generator::html_ContactPage()
 	html_out += U("</form>");
 	return html_out;
 }
+std::wstring html_generator::html_AdminLoginPage()
+{
+	std::wstring html_out;
+	html_out = U("<form class=\"contact\" id=\"contactForm\" action=\"http://localhost:8090/Admin\" method='post'>");
+	html_out += U("<label class=\"contactLables\">Usenrame</label>");
+	html_out += U(" <input  class=\"contactInputs\" name=\"username\" type=\"text\" placeholder=\"Enter your Username...\">");
+	html_out += U("<label class=\"contactLables\">Password</label>");
+	html_out += U(" <input  class=\"contactInputs\" name=\"password\" type=\"text\" placeholder=\"Enter your Email...\">");
+	html_out += U("<input class=\"submitBTNC\" type=\"submit\" value=\"Send\">");
+	html_out += U("</form>");
+	return html_out;
+}
 std::wstring html_generator::html_searchPage()
 {
 	

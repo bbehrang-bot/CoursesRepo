@@ -35,6 +35,7 @@ public:
 	int db_searchCount(std::map<std::wstring, std::wstring> row_data);
 	std::vector<int> db_search(std::map<std::wstring, std::wstring> row_data);
 	int  db_sendMsg(std::map<std::wstring, std::wstring> row_data);
+	int  db_Admin(std::map<std::wstring, std::wstring> row_data);
 	Company db_getCompany();
 	int db_placeOrderTable(std::map<std::wstring, std::wstring> row_data,double totalPrice);
 	int db_orderTableId();
