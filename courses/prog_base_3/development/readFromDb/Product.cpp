@@ -8,7 +8,7 @@ std::string Product::Product_getName()
 {
 	return name;
 }
-float Product::Product_getPrice()
+double Product::Product_getPrice()
 {
 	return price;
 }
@@ -20,11 +20,5 @@ std::string Product::Product_getImageUrl()
 {
 	return imageUrl;
 }
-int Product::Product_getInStock()
-{
-	return inStock;
-}
-void Product::print()
-{
-	std::cout << id << name << price << description << imageUrl << inStock;
-}
+
+

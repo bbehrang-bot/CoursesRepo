@@ -23,16 +23,20 @@ public:
 	int get_all_table_names(std::vector<std::string>& table_names);
 	int get_table_data(std::string table_name, std::vector<std::vector<std::pair<std::string,std::string>>>& sql_res, int limit, int offset);
 	int delete_table_row(std::string table_name, std::string row_id);
-	//int edit_table_row(std::string table_name, std::string row_id);
+	//	int edit_table_row(std::string table_name, std::string row_id);
 	int insert_row_into_table(std::string table_name, std::map<std::wstring, std::wstring> row_data);
 	int edit_row_into_table(std::string table_name, std::string row_id,std::map<std::wstring, std::wstring> row_data);
+	int db_getOrders(std::vector<std::vector<std::pair<std::string, std::string>>>& sql_res, int id);
 	//////////////////////////////
 	int db_getSize();
 	Product db_fillInfo(sqlite3_stmt * stmt);
 	Product sqlite_db::db_get_product(int id);
 	std::vector<int> db_getIds();
+	int db_searchCount(std::map<std::wstring, std::wstring> row_data);
+	std::vector<int> db_search(std::map<std::wstring, std::wstring> row_data);
+	int  db_sendMsg(std::map<std::wstring, std::wstring> row_data);
 	Company db_getCompany();
-	int db_placeOrderTable();
+	int db_placeOrderTable(std::map<std::wstring, std::wstring> row_data,double totalPrice);
 	int db_orderTableId();
 	int db_placeOrder(Product product, int count, int orderTableId);
 };

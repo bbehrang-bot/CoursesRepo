@@ -121,7 +121,9 @@ int sqlite_db::insert_row_into_table(std::string table_name, std::map<std::wstri
 			c = replaceAll(c, "+", " ");
 			c = replaceAll(c, "%3A", ":");
 			c = replaceAll(c, "%2F", "/");
-			std::cout << c;
+			c = replaceAll(c, "%2C", ",");
+			c = replaceAll(c, "%28", "(");
+			c = replaceAll(c, "%29", ")");
 			sql_query += "'" + c + "',";
 		
 	}
@@ -153,6 +155,9 @@ int sqlite_db::edit_row_into_table(std::string table_name, std::string row_id, s
 		c = replaceAll(c, "+", " ");
 		c = replaceAll(c, "%3A", ":");
 		c = replaceAll(c, "%2F", "/");
+		c = replaceAll(c, "%2C", ",");
+		c = replaceAll(c, "%28", "(");
+		c = replaceAll(c, "%29", ")");
 		std::cout << c;
 		puts("");
 		sql_query += "'" + c + "',";
@@ -169,6 +174,23 @@ int sqlite_db::edit_row_into_table(std::string table_name, std::string row_id, s
 	}
 
 	return (int)sqlite3_last_insert_rowid(db);
+}
+int sqlite_db::db_getOrders(std::vector<std::vector<std::pair<std::string, std::string>>>& table_rows,int id)
+{
+	int rc;
+	std::string sql_query;
+	sqlite_db::tmp_sql_results.clear();
+	table_rows.clear();
+
+	sql_query = "SELECT OProductId FROM OrderProductBridge Where OorderId =" + std::to_string(id) + ";";
+	rc = sqlite3_exec(db, sql_query.c_str(), sqlite_db::callback, 0, &zErrMsg);
+	if (rc != SQLITE_OK) {
+		printf("SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+		return -1;
+	}
+	table_rows = sqlite_db::tmp_sql_results;
+	return 0;
 }
 int sqlite_db::db_getSize()
 {
@@ -188,14 +210,19 @@ int sqlite_db::db_getSize()
 }
 Product sqlite_db::db_fillInfo(sqlite3_stmt * stmt)
 {
+	std::string name, description, imageUrl;
 	int id = sqlite3_column_int(stmt, 0);
-
-	std::string name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
-	float price = sqlite3_column_double(stmt, 2);
-	std::string description = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
-	std::string imageUrl = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4)));
-	int inStock = sqlite3_column_double(stmt, 5);
-	Product product(id, name, price, description, imageUrl, inStock);
+	const unsigned char * cName = sqlite3_column_text(stmt, 1);
+	const unsigned char * cdescription = sqlite3_column_text(stmt, 3);
+	const unsigned char * cimageUrl = sqlite3_column_text(stmt, 4);
+	if(cName != NULL)
+		name = std::string(reinterpret_cast<const char*>(cName));
+	double price = sqlite3_column_double(stmt, 2);
+	if (cdescription != NULL)
+		description = std::string(reinterpret_cast<const char*>(cdescription));
+	if (cimageUrl != NULL)
+		imageUrl = std::string(reinterpret_cast<const char*>(cimageUrl));
+	Product product(id, name, price, description, imageUrl);
 	return product;
 	
 }
@@ -240,8 +267,126 @@ std::vector<int> sqlite_db::db_getIds()
 	
 }
 
+int sqlite_db::db_searchCount(std::map<std::wstring, std::wstring> row_data)
+{
+	std::string word;
+	int i = 1;
+	for (auto rw : row_data) {
+		if (i == 1)
+		{
+			word = std::string(rw.second.begin(), rw.second.end());
+			i++;
+		}
+		else
+		{
+			break;
+
+		}
+
+	}
+	sqlite3_stmt * stmt = NULL;
+
+	std::string qu = "SELECT  COUNT(*) FROM ProductTable WHERE Name LIKE '%" + word + "%'";
+	char * sqlQuery = new char[qu.length() + 1];
+	std::strcpy(sqlQuery, qu.c_str());
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+	int rc = sqlite3_step(stmt);
+	if (rc == SQLITE_ERROR)
+	{
+		puts("Error : Select Count");
+		exit(1);
+	}
+	int size = sqlite3_column_int(stmt, 0);
+	sqlite3_finalize(stmt);
+	free(sqlQuery);
+	return size;
+	
+}
+std::vector<int> sqlite_db::db_search(std::map<std::wstring, std::wstring> row_data)
+{
+	std::string word;
+	int i = 1;
+	for (auto rw : row_data) {
+		if (i == 1)
+		{
+			word = std::string(rw.second.begin(), rw.second.end());
+			i++;
+		}
+		else
+		{
+			break;
+
+		}
+
+	}
+	char * wordd = new char[word.length() + 1];
+	std::strcpy(wordd, word.c_str());
+	int size = db_searchCount(row_data);
+	std::vector<int> ids(size);
+	sqlite3_stmt * stmt = NULL;
+	
+	std::string qu = "SELECT  Id FROM ProductTable WHERE Name LIKE '%" + word + "%'";
+	char * sqlQuery = new char[qu.length() + 1];
+	std::strcpy(sqlQuery, qu.c_str());
+	
+	sqlite3_bind_text(stmt, 1, wordd, -1, SQLITE_STATIC);
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+	int rc;
+	
+	printf("SIZE IS %d", size);
+	for (int i = 0; i < size; i++)
+	{
+		rc = sqlite3_step(stmt);
+		if (rc == SQLITE_ERROR)
+		{
+			printf("SQL error: %s\n", zErrMsg);
+			sqlite3_free(zErrMsg);
+		}
+		ids[i] = (sqlite3_column_int(stmt, 0));
+		
+	}
+	sqlite3_finalize(stmt);
+	free(wordd);
+	return ids;
+
+}
+int sqlite_db::db_sendMsg(std::map<std::wstring, std::wstring> row_data)
+{
+	int rc;
+	std::string sql_query;
+	sql_query = "INSERT INTO Messages (";
+	for (auto rw : row_data) {
+		sql_query += std::string(rw.first.begin(), rw.first.end()) + ",";
+	}
+	sql_query.pop_back();
+	sql_query += ") VALUES (";
+	int p = 0;
+	for (auto rw : row_data) {
+		std::string c = std::string(rw.second.begin(), rw.second.end());
+		c = replaceAll(c, "+", " ");
+		c = replaceAll(c, "%3A", ":");
+		c = replaceAll(c, "%2F", "/");
+		c = replaceAll(c, "%2C", ",");
+		c = replaceAll(c, "%28", "(");
+		c = replaceAll(c, "%29", ")");
+		sql_query += "'" + c + "',";
+
+	}
+	sql_query.pop_back();
+	sql_query += ");";
+
+	rc = sqlite3_exec(db, sql_query.c_str(), sqlite_db::callback, 0, &zErrMsg);
+	if (rc != SQLITE_OK) {
+		printf("SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+		return -1;
+	}
+
+	return 1;
+}
 Company sqlite_db::db_getCompany()
 {
+	std::string name, telephone, address, about;
 	sqlite3_stmt * stmt = NULL;
 	char * sqlQuery = "SELECT * FROM Company";
 	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
@@ -251,16 +396,24 @@ Company sqlite_db::db_getCompany()
 		printf("SQL error: %s\n", zErrMsg);
 		sqlite3_free(zErrMsg);
 	}
-	std::string name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
-	std::string telephone = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
-	std::string address = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2)));
-	std::string about = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
+	const unsigned char * cName = sqlite3_column_text(stmt, 0);
+	const unsigned char * ctelephone = sqlite3_column_text(stmt, 1);
+	const unsigned char * caddress = sqlite3_column_text(stmt, 2);
+	const unsigned char * cabout = sqlite3_column_text(stmt, 3);
+	if(cName != NULL)
+		name = std::string(reinterpret_cast<const char*>(cName));
+	if (ctelephone != NULL)
+		telephone = std::string(reinterpret_cast<const char*>(ctelephone));
+	if (caddress != NULL)
+		address = std::string(reinterpret_cast<const char*>(caddress));
+	if (cabout != NULL)
+		about = std::string(reinterpret_cast<const char*>(cabout));
 	Company company(name, telephone, about, address);
 
 	sqlite3_finalize(stmt);
 	return company;
 }
-int  sqlite_db::db_placeOrderTable()
+int  sqlite_db::db_placeOrderTable(std::map<std::wstring, std::wstring> row_data,double totalPrice)
 {
 	time_t rawtime;
 	struct tm * timeinfo;
@@ -269,27 +422,52 @@ int  sqlite_db::db_placeOrderTable()
 	timeinfo = localtime(&rawtime);
 	strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
 	//
+	std::string word;
+	int i = 1;
+	for (auto rw : row_data) {
+		if (i == 1)
+		{
+			word = std::string(rw.second.begin(), rw.second.end());
+			i++;
+		}
+		else
+		{
+			break;
+
+		}
+
+	}
+	char * tel = new char[word.length() + 1];
+	strcpy(tel, word.c_str());
+	std::cout << totalPrice;
 	sqlite3_stmt * stmt = NULL;
-	char * sqlQuery = "INSERT INTO OrderTable ('Date') VALUES (?);";
+	char * sqlQuery = "INSERT INTO OrderTable ('Date','Telephone','TotalSum') VALUES (?,?,?);";
+	puts(sqlQuery);
 	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
 
 	sqlite3_bind_text(stmt, 1, buffer, -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 2, tel, -1, SQLITE_STATIC);
+	sqlite3_bind_double(stmt, 3, totalPrice);
 	int rc = sqlite3_step(stmt);
 	if (rc == SQLITE_ERROR)
 	{
-		puts("ERROR : Order");
+		puts("ERROR : Order");	
+		free(tel);
 		return -1;
 	}
 	else
 	{
-		int addedId = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
-		return rc;
+		printf("INSIDE THAT SHIT %d", rc);
+		return 1;
 	}
+	free(tel);
+	return -1;
 
 }
 int sqlite_db::db_orderTableId()
 {
+	int addedId = -1;
 	sqlite3_stmt * stmt = NULL;
 	char * sqlQuery = "SELECT * FROM OrderTable ORDER BY ID DESC LIMIT 1;";
 	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
@@ -302,10 +480,12 @@ int sqlite_db::db_orderTableId()
 	}
 	else
 	{
-		int addedId = sqlite3_column_int(stmt, 0);
+		addedId = sqlite3_column_int(stmt, 0);
+		printf("Added id is %d", addedId);
 		sqlite3_finalize(stmt);
 		return addedId;
 	}
+	return addedId;
 }
 int sqlite_db::db_placeOrder(Product product, int count,int orderTableId)
 {

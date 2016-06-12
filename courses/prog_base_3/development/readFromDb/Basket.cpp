@@ -44,6 +44,13 @@ void Basket::Basket_remove(Product product)
 		puts("basket and count size differs");
 	
 }
+void Basket::Basket_removeAll()
+{
+	std::vector<Product> itemEmpty;
+	std::vector<int> countsEmpy;
+	items = itemEmpty;
+	counts = countsEmpy;
+}
 std::vector<Product> Basket::Basket_getItems()
 {
 	return items;

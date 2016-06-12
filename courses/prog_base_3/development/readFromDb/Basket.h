@@ -15,6 +15,7 @@ public:
 	std::vector<Product> Basket_getItems();
 	std::vector<int> Basket_getCounts();
 	void Basket_remove(Product product);
+	void Basket_removeAll();
 	~Basket();
 };
 

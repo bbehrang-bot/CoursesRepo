@@ -54,8 +54,13 @@ std::wstring html_generator::html_render_body(std::wstring body,Company company)
 	html_out += U("					 <h1><a href=\"http://localhost:8090/\" title='") + cName + U("'>") + cName + U("</a></h1>");
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"header_operations\">");
-	html_out += U("					 <div class=\"header_search  header_ops\"><a href=\"#\" title=\"Search\"></a></div>");
 	html_out += U("					 <div class=\"header_basket header_ops\"><a href=\"http://localhost:8090/Basket\" title=\"Basket\"></a></div>");
+	html_out += U("					 <div class=\"header_search header_ops\">");
+	html_out += U("						 <form class=\"searchForm\" action=\"http://localhost:8090/Search\" method:\"get\">");
+	html_out += U("							 <input class=\"searchBox\" type='text' name='productName' placeholder='type product name...'>");
+	html_out += U("							 <input class=\"searchBTN\" value='' type='submit'>");
+	html_out += U("						 </form>");
+	html_out += U("					 </div>");
 	html_out += U("              </div>");
 	html_out += U("          </div>");
 	html_out += U("          <div class=\"navigation\">");
@@ -99,10 +104,15 @@ std::wstring html_generator::html_productPage(Product product)
 	 std::string productName = product.Product_getName();
 	 std::wstring pName = std::wstring(productName.begin(), productName.end());
 
-	 float productPrice = product.Product_getPrice();
-	 std::string pPriceStr = std::to_string(productPrice);
-	 std::string pPriceStrSub = pPriceStr.substr(0, 6);
-	 std::wstring pPrice = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+	 double productPrice = product.Product_getPrice();
+	 int full = (int)productPrice;
+	 double dec = productPrice - full;
+	 std::string priceFull = std::to_string(full);
+	 std::string dec_str = std::to_string(dec);
+	 dec_str = dec_str.substr(1, 3);
+	 
+	 priceFull += dec_str;
+	 std::wstring pPrice = std::wstring(priceFull.begin(), priceFull.end());
 
 	 std::string productDescription = product.Product_getDescription();
 	 std::wstring pDes = std::wstring(productDescription.begin(), productDescription.end());
@@ -110,7 +120,6 @@ std::wstring html_generator::html_productPage(Product product)
 	 std::string productImageUrl = product.Product_getImageUrl();
 	 std::wstring pImageUrl = std::wstring(productImageUrl.begin(), productImageUrl.end());
 
-	 int productInStock = product.Product_getInStock();
 
 	 int id = product.Product_getId();
 	 std::string id_str = std::to_string(id);
@@ -140,10 +149,18 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	std::string productName = product.Product_getName();
 	std::wstring pName = std::wstring(productName.begin(), productName.end());
 
-	float productPrice = product.Product_getPrice();
-	std::string pPriceStr = std::to_string(productPrice);
-	std::string pPriceStrSub = pPriceStr.substr(0, 6);
-	std::wstring pPrice = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+	double productPrice = product.Product_getPrice();
+	//std::string pPriceStr = std::to_string(productPrice);
+	//std::string pPriceStrSub = pPriceStr.substr(0, 6);
+	//std::wstring pPrice = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+	int full = (int)productPrice;
+	double dec = productPrice - full;
+	std::string priceFull = std::to_string(full);
+	std::string dec_str = std::to_string(dec);
+	dec_str = dec_str.substr(1, 3);
+	priceFull += dec_str;
+	std::wstring pPrice = std::wstring(priceFull.begin(), priceFull.end());
+
 
 	std::string productDescription = product.Product_getDescription();
 	std::wstring pDes = std::wstring(productDescription.begin(), productDescription.end());
@@ -158,7 +175,6 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	link.append(id_str);
 	std::wstring wLink = std::wstring(link.begin(), link.end());
 
-	int productInStock = product.Product_getInStock();
 	html_out += U("			<div class=\"product-detail-wrapper\">");
 	html_out += U("				<div class=\"product-detail-frame\">");
 	html_out += U("					<div class=\"product-detail-frame\">");
@@ -193,15 +209,24 @@ std::wstring html_generator::html_basketPage(Product product,int count)
 	std::string productName = product.Product_getName();
 	std::wstring pName = std::wstring(productName.begin(), productName.end());
 
-	float productPrice = product.Product_getPrice();
-	std::string pPriceStr = std::to_string(productPrice);
-	std::string pPriceStrSub = pPriceStr.substr(0, 6);
-	std::wstring pPrice = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+	double productPrice = product.Product_getPrice();
+	int full = (int)productPrice;
+	double dec = productPrice - full;
+	std::string priceFull = std::to_string(full);
+	std::string dec_str = std::to_string(dec);
+	dec_str = dec_str.substr(1, 3);
+	priceFull += dec_str;
+	std::wstring pPrice = std::wstring(priceFull.begin(), priceFull.end());
 
-	float ptimesCount = productPrice * count;
-	pPriceStr = std::to_string(ptimesCount);
-	pPriceStrSub = pPriceStr.substr(0, 6);
-	std::wstring pPriceCount = std::wstring(pPriceStrSub.begin(), pPriceStrSub.end());
+	double ptimesCount = productPrice * count;
+	full = (int)ptimesCount;
+    dec = ptimesCount - full;
+	priceFull = std::to_string(full);
+	dec_str = std::to_string(dec);
+	dec_str = dec_str.substr(1, 3);
+	priceFull += dec_str;
+
+	std::wstring pPriceCount = std::wstring(priceFull.begin(), priceFull.end());
 
 
 
@@ -213,7 +238,6 @@ std::wstring html_generator::html_basketPage(Product product,int count)
 
 	std::string countStr = std::to_string(count);
 	std::wstring count_wstr = std::wstring(countStr.begin(), countStr.end());
-	int productInStock = product.Product_getInStock();
 
 	int id = product.Product_getId();
 	std::string id_str = std::to_string(id);
@@ -246,6 +270,119 @@ std::wstring html_generator::html_basketPage(Product product,int count)
 	html_out += U("					<span>€ ") + pPrice + U("<span class=\"psubinfo\">for each unit</span></span>");
 	html_out += U("				</div>");
 	html_out += U("			</div>");
+	return html_out;
+}
+std::wstring html_generator::html_buyForm(double price, int count)
+{
+
+	std::wstring html_out;
+	std::string count_str = std::to_string(count);
+	std::wstring count_wstr = std::wstring(count_str.begin(), count_str.end());
+
+	double productPrice = price;
+	int full = (int)productPrice;
+	double dec = productPrice - full;
+	std::string priceFull = std::to_string(full);
+	std::string dec_str = std::to_string(dec);
+	dec_str = dec_str.substr(1, 3);
+
+	priceFull += dec_str;
+	std::wstring pPrice = std::wstring(priceFull.begin(), priceFull.end());
+
+	
+
+
+	html_out += U(" <form class=\"contact\" id=\"contactForm\" action=\"http://localhost:8090/Basket/PlaceOrder\" method='post'>");
+	html_out += U("  <label class=\"contactLables\">Items Ordered :") + count_wstr + U("</label>");
+	html_out += U("  <label class=\"contactLables\">Total Price :") + pPrice + U("</label>");
+	html_out += U("  <label class=\"contactLables\">Your Telephone</label>");
+	html_out += U(" <input  class=\"contactInputs\" name=\"Telephone\" type=\"text\" placeholder=\"Enter your Telephone...\">");
+	html_out += U(" <input class=\"ordersPlace\" type=\"submit\" value=\"Place Order\">");
+	html_out += U(" <input  class=\"contactInputs\" name=\"TotalSum\" type=\"text\" style=\"visibility:hidden;\" value='") + pPrice + U("'>");
+	return html_out;
+}
+std::wstring html_generator::html_ContactPage()
+{
+	std::wstring html_out;
+	html_out = U("<form class=\"contact\" id=\"contactForm\" action=\"http://localhost:8090/Contact/Submit\" method='post'>");
+	html_out += U("<label class=\"contactLables\">Name</label>");
+	html_out += U(" <input  class=\"contactInputs\" name=\"Name\" type=\"text\" placeholder=\"Enter your Name...\">");
+	html_out += U("<label class=\"contactLables\">Email</label>");
+	html_out += U(" <input  class=\"contactInputs\" name=\"Email\" type=\"text\" placeholder=\"Enter your Email...\">");
+	html_out += U("<label class=\"contactLables\">Message</label>");
+	html_out += U("<textarea form=\"contactForm\" wrap=\"physical\" class=\"contactInputs txtBox\" name=\"Content\" type=\"text\" placeholder=\"Enter your Message...\" ></textarea>");
+	html_out += U("<input class=\"submitBTNC\" type=\"submit\" value=\"Send\">");
+	html_out += U("</form>");
+	return html_out;
+}
+std::wstring html_generator::html_searchPage()
+{
+	
+	
+}
+std::wstring html_generator::html_Alert(std::string body)
+{
+	std::wstring html_out;
+	html_out = U("<div class=\"Alert\"><p>") + std::wstring(body.begin(), body.end()) + U("</p></div>");
+	return html_out;
+}
+std::wstring html_generator::html_aboutFull(Company company)
+{
+	std::string companyName = company.Company_getName();
+	std::wstring cName = std::wstring(companyName.begin(), companyName.end());
+
+	std::string companyAddress = company.Company_getAddress();
+	std::wstring cAddress = std::wstring(companyAddress.begin(), companyAddress.end());
+
+	std::string companyTelephone = company.Company_getTelephone();
+	std::wstring cTelephone = std::wstring(companyTelephone.begin(), companyTelephone.end());
+
+	std::string companyabout = company.Company_getAbout();
+	std::wstring cAbout = std::wstring(companyabout.begin(), companyabout.end());
+	std::wstring html_out;
+	html_out = U("<div class=\"about\">");
+	html_out += U("<p>") + std::wstring(cAbout.begin(), cAbout.end()) + U("</p>");
+	html_out += U("</div>");
+	return html_out;
+}
+std::wstring html_generator::html_ordersManagment(const std::vector<std::vector<std::pair<std::string, std::string>>>& table_data, sqlite_db db)
+{
+	std::wstring html_out;
+	html_out = U("      <table border=\"1\" cellpadding=\"5\" cellspacing=\"5\">\n");
+	if (table_data.size() > 0) {
+		html_out += U("        <tr>\n");
+		for (auto col : table_data.at(0)) {
+			//if (col.first == "id" || col.first == "Id" || col.first == "iD" || col.first == "ID")
+			html_out += U("          <th>") + std::wstring(col.first.begin(), col.first.end()) + U("</th>\n");
+		}
+		html_out += U("<th>Products Ordered</th>\n");
+
+		html_out += U("        </tr>\n");
+	}
+	for (std::vector<std::pair<std::string, std::string>> row_data : table_data) {
+		html_out += U("        <tr>\n");
+		for (auto col : row_data) {
+			//if (col.first == "id" || col.first == "Id" || col.first == "iD" || col.first == "ID")
+			html_out += U("          <td>") + std::wstring(col.second.begin(), col.second.end()) + U("</td>\n");
+		}
+		std::string row_id = find_id(row_data);
+		int myId = atoi(row_id.c_str());
+		std::string table_name = "OrderTable";
+		std::vector<std::vector<std::pair<std::string, std::string>>> table_data2;
+		db.db_getOrders(table_data2, myId);
+		html_out += U("          <td>");
+		for (std::vector<std::pair<std::string, std::string>> row_data2 : table_data2) {	
+			
+			for (auto col2 : row_data2) {
+				//if (col.first == "id" || col.first == "Id" || col.first == "iD" || col.first == "ID")
+				html_out += std::wstring(col2.second.begin(), col2.second.end()) + U(" , ");
+			}
+			
+		}
+		html_out += U("</td>\n");
+		html_out += U("        </tr>\n");
+	}
+	html_out += U("      </table>\n");
 	return html_out;
 }
 std::wstring html_generator::html_tableListHtml()
@@ -329,8 +466,13 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += U("					 <h1><a href=\"http://localhost:8090/\" title='") + cName + U("'>") + cName + U("</a></h1>");
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"header_operations\">");
-	html_out += U("					 <div class=\"header_search  header_ops\"><a href=\"#\" title=\"Search\"></a></div>");
 	html_out += U("					 <div class=\"header_basket header_ops\"><a href=\"http://localhost:8090/Basket\" title=\"Basket\"></a></div>");
+	html_out += U("					 <div class=\"header_search  header_ops\">");
+	html_out += U("						 <form class=\"searchForm\" action=\"http://localhost:8090/Search\" method:\"get\">");
+	html_out += U("							 <input class=\"searchBox\" type='text' name='productName' placeholder='type product name...'>");
+	html_out += U("							 <input class=\"searchBTN\" value='' type='submit'>");
+	html_out += U("						 </form>");
+	html_out += U("					 </div>");
 	html_out += U("              </div>");
 	html_out += U("          </div>");
 	html_out += U("          <div class=\"navigation\">");
@@ -467,7 +609,6 @@ std::wstring html_generator::table_data_html(const std::vector<std::vector<std::
 	html_out += U("  </html>\n");
 	return html_out;
 }
-
 std::wstring html_generator::input_form_html(const std::vector<std::vector<std::pair<std::string, std::string>>>& table_data, const std::string table_name)
 {
 	std::wstring html_out;
@@ -512,7 +653,7 @@ std::wstring html_generator::input_form_html_edit(const std::vector<std::vector<
 		std::string row_id = find_id(row_data);
 
 		html_out += U("          <td>");
-		html_out += U("<form action='") + std::wstring(service_url.begin(), service_url.end()) + U("/Admin/") + std::wstring(table_name.begin(), table_name.end()) + U("/edit/") + std::wstring(row_id.begin(), row_id.end()) + U("/' method='get'>");
+		html_out += U("<form action='") + std::wstring(service_url.begin(), service_url.end()) + U("/Admin/") + std::wstring(table_name.begin(), table_name.end()) + U("/edit/") + std::wstring(row_id.begin(), row_id.end()) + U("/' method='post'>");
 		html_out += U("  <table border=\"0\" cellpadding=\"5\" cellspacing=\"5\">\n");
 		if (table_data.size() > 0) {
 			for (auto col : row_data) {
@@ -541,10 +682,6 @@ std::wstring html_generator::input_form_html_edit(const std::vector<std::vector<
 
 
 }
-
-
-
-
 std::string html_generator::find_id(std::vector<std::pair<std::string, std::string>> row_data)
 {
 	for (std::pair<std::string, std::string> col : row_data) {

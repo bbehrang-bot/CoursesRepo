@@ -649,3 +649,171 @@ display: block;
     letter-spacing: 0.2em;
     color: #333333;
 }
+.searchForm{
+    width: 100%;
+    height: 97%;
+    text-align: left;
+    margin: auto;
+    margin-top: 5px;
+    margin-left: 10px;
+    font-family: "aileron light";
+    font-size: 2em;
+    font-style: normal;
+    /* font-weight: bold; */
+    letter-spacing: 0.2em;
+    color: #333333;
+    float: left;
+    display: block;
+}
+.searchLable{
+    
+    letter-spacing: 0;
+    font-size: 0.8em;
+    color: #333333;
+    font-weight: normal;
+    font-family: "aileron light";
+}
+.searchBox{
+border: 1px solid #ECECEC;
+    width: 73%;
+    font-size: 0.5em;
+    padding: 0px 5px;
+    color: #949494;
+    height: 90%
+}
+.searchBTN{
+    background-color: white;
+    background-image: url(http://i.imgur.com/xThwoM7.png);
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    float: right;
+    width: 50px;
+    height: 43px;
+    
+}
+.header_search
+{
+    background: none;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-size: 1em ;
+font-style: italic;
+}
+::-moz-placeholder { /* Firefox 19+ */
+    font-size: 1em !important;
+font-style: italic;
+}
+:-ms-input-placeholder { /* IE 10+ */
+    font-size: 1em;
+font-style: italic;
+}
+:-moz-placeholder { /* Firefox 18- */
+    font-size: 1em;
+font-style: italic;
+}
+.header_search{
+    width:270px;
+    background-position: right center;
+    margin-right: 45px;
+    
+}
+.header_basket{
+    background-position: left center;
+}
+.not_found{
+width:100%;
+height:100%;
+padding-top:50px;
+text-align : left;
+}
+.Alert{
+width:100%;
+height:100%;
+padding-top:50px;
+text-align : left;
+}
+.Alert p{
+font-family: "alien league";
+    font-size: 6em;
+    font-style: italic;
+    color: #969696;
+}
+.not_found p{
+font-family: "alien league";
+    font-size: 6em;
+    font-style: italic;
+    color: #969696;
+}
+.contactInputs{
+border: 1px solid #ECECEC;
+    width: 95%;
+    font-size: 1.5em;
+    margin-top: 25px;
+    font-family: "aileron light";
+    height: 80px;
+    padding: 0 10px;
+    color: #7b7b7b;
+}
+.contactLables{
+    letter-spacing: 0;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.8em;
+    color: #7b7b7b;
+    font-weight: normal;
+    font-family: "aileron light";
+    /* float: left; */
+    margin: auto;
+    clear: both;
+    margin-top: 25px;
+}
+.contact{
+    
+        width: 50%;
+    height: 800px;
+    margin: auto;
+    overflow: hidden;
+}
+.txtBox{
+    
+    height: 210px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    resize: none;
+}
+.submitBTNC{
+    border: 1px solid #ECECEC;
+    width: 100%;
+    background: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    margin-top: 25px;
+    font-family: "aileron light";
+    height: 80px;
+    padding: 0 10px;
+    color: #7b7b7b;
+}
+.about p{
+    letter-spacing: 0.7px;
+    line-height: 3em;
+}
+.ordersPlace{
+    
+  background: none;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 85px;
+    border: 1px solid #ECECEC;
+    margin: 30px auto;
+    text-align: center;
+    line-height: 100%;
+    cursor: pointer;
+    font-family: "aileron light";
+    font-size: 2em;
+    color: #7b7b7b;
+
+}
