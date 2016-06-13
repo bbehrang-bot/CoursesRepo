@@ -27,9 +27,12 @@ std::wstring html_generator::html_render_body(std::wstring body,Company company)
 	std::wstring cTelephone = std::wstring(companyTelephone.begin(), companyTelephone.end());
 
 	std::string companyabout = company.Company_getAbout();
-	std::string subAbout = companyabout.substr(0, 800);
+	std::string subAbout = companyabout;
+	if (companyabout.length() > 800)
+	{
+		subAbout = companyabout.substr(0, 800);
+	}
 	std::wstring cAbout = std::wstring(subAbout.begin(), subAbout.end());
-
 	std::wstring html_out;
 	html_out = U("<!DOCTYPE html>\n");
 	html_out += U("    <head>\n");
@@ -48,7 +51,7 @@ std::wstring html_generator::html_render_body(std::wstring body,Company company)
 	html_out += U("      <div class=\"wrapper\">");
 	html_out += U("          <div class=\"header\">");
 	html_out += U("              <div class=\"hashtag\">");
-	html_out += U("                 <a href=\"#\">#MENCLOTHING</a>");
+	html_out += U("                 <a href=\"https://twitter.com/hashtag/menclothing\">#MENCLOTHING</a>");
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"logo\">");
 	html_out += U("					 <h1><a href=\"http://localhost:8090/\" title='") + cName + U("'>") + cName + U("</a></h1>");
@@ -76,15 +79,15 @@ std::wstring html_generator::html_render_body(std::wstring body,Company company)
 	html_out += U("		</div>");
 	html_out += U("				<div class=\"footer\">");
 	html_out += U("					<ul class=\"footer-ul\">");
-	html_out += U("						<li><a href=\"#\" title=\"Shop\">Shop</a></li>");
-	html_out += U("						<li><a href=\"#\" title=\"Contact\">Contact</a></li>");
-	html_out += U("						<li><a href=\"#\" title=\"About\">About</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/Products\" title=\"Shop\">Shop</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/Contact\" title=\"Contact\">Contact</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/About\" title=\"About\">About</a></li>");
 	html_out += U("				   </ul>");
 	html_out += U("				<div class=\"social-media-container\">");
 	html_out += U("					<div class=\"social-inner\">");
-	html_out += U("						<div class=\"social-media gp\"><a href=\"#\" title=\"Google Plus\"></a></div>");
-	html_out += U("						<div class=\"social-media tw\"><a href=\"#\" title=\"Twitter\"></a></div>");
-	html_out += U("						<div class=\"social-media fb\"><a href=\"#\" title=\"Facebook\"></a></div>");
+	html_out += U("						<div class=\"social-media gp\"><a href=\"https://plus.google.com/+TommyHilfiger/videos\" title=\"Google Plus\"></a></div>");
+	html_out += U("						<div class=\"social-media tw\"><a href=\"https://twitter.com/tommyhilfiger\" title=\"Twitter\"></a></div>");
+	html_out += U("						<div class=\"social-media fb\"><a href=\"https://www.facebook.com/tommyhilfiger\" title=\"Facebook\"></a></div>");
 	html_out += U("				    </div>");
 	html_out += U("				</div>");
 	html_out += U("				<div class=\"dev\">");
@@ -172,8 +175,14 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	int id = product.Product_getId();
 	std::string id_str = std::to_string(id);
 	std::string link = "http://localhost:8090/Products/AddToBasket/";
+	std::string link2 = "http://localhost:8090/Products/";
+	link2.append(id_str);
+	std::wstring wLink2 = std::wstring(link2.begin(), link2.end());
 	link.append(id_str);
 	std::wstring wLink = std::wstring(link.begin(), link.end());
+
+
+
 
 	html_out += U("			<div class=\"product-detail-wrapper\">");
 	html_out += U("				<div class=\"product-detail-frame\">");
@@ -194,13 +203,74 @@ std::wstring html_generator::html_productDetailPage(Product product)
 	html_out += U("									function addToBasket(){var xhttp = new XMLHttpRequest();xhttp.open('POST','") + wLink + U("',true);xhttp.send()}");
 	html_out += U("						</script>");
 	html_out += U("						<div class=\"order\">");
-	html_out += U("							<a  onclick=\"addToBasket()\" title=\"Add to Basket\">Add To Basket</a>");
+	html_out += U("							<a href='")+ wLink2 + U("'  onclick=\"addToBasket()\" title=\"Add to Basket\">Add To Basket</a>");
 	html_out += U("						</div>");
 
 	html_out += U("					</div>");
 	html_out += U("				</div>");
 	html_out += U("			</div>");
 	return html_out;
+
+}
+std::wstring html_generator::html_homePagePartial(std::vector<Product> products)
+{
+	std::string linkUrl = "http://localhost:8090/Products/";
+	///////////////////////
+	std::string pr1Name = products.at(0).Product_getName();
+	std::wstring pr1Name_wString = std::wstring(pr1Name.begin(), pr1Name.end());
+	std::string pr1ImageUrl = products.at(0).Product_getImageUrl();
+	std::wstring pr1ImageUrl_wString = std::wstring(pr1ImageUrl.begin(), pr1ImageUrl.end());
+	std::string p1Id = std::to_string(products.at(0).Product_getId());
+	std::wstring p1Id_wString = std::wstring(p1Id.begin(), p1Id.end());
+	std::string linkUrl1 = linkUrl;
+	linkUrl1.append(p1Id);
+	std::wstring link1_ws = std::wstring(linkUrl1.begin(), linkUrl1.end());
+	////////////////////////
+	std::string pr2Name = products.at(1).Product_getName();
+	std::wstring pr2Name_wString = std::wstring(pr2Name.begin(), pr2Name.end());
+	std::string pr2ImageUrl = products.at(1).Product_getImageUrl();
+	std::wstring pr2ImageUrl_wString = std::wstring(pr2ImageUrl.begin(), pr2ImageUrl.end());
+	std::string p2Id = std::to_string(products.at(1).Product_getId());
+	std::wstring p2Id_wString = std::wstring(p2Id.begin(), p2Id.end());
+	std::string linkUrl2 = linkUrl;
+	linkUrl2.append(p2Id);
+	std::wstring link2_ws = std::wstring(linkUrl2.begin(), linkUrl2.end());
+	////////////////////////////
+	std::string pr3Name = products.at(2).Product_getName();
+	std::wstring pr3Name_wString = std::wstring(pr3Name.begin(), pr3Name.end());
+	std::string pr3ImageUrl = products.at(2).Product_getImageUrl();
+	std::wstring pr3ImageUrl_wString = std::wstring(pr3ImageUrl.begin(), pr3ImageUrl.end());
+	std::string p3Id = std::to_string(products.at(2).Product_getId());
+	std::wstring p3Id_wString = std::wstring(p3Id.begin(), p3Id.end());
+	std::string linkUrl3 = linkUrl;
+	linkUrl3.append(p3Id);
+	std::wstring link3_ws = std::wstring(linkUrl3.begin(), linkUrl3.end());
+	////////////////////////////
+	std::wstring html_out;
+	html_out = U("				<div class=\"futured-product\">");
+	html_out += U("					<a href='") + link1_ws + U("' title='") + pr1Name_wString + U("'>");
+	html_out += U("						<div class=\"futured-gname\"><h3>") + pr1Name_wString + U("</h3></div>");
+	html_out += U("						<div class=\"futured-image\"><img src='") + pr1ImageUrl_wString + U("'/></div>");
+	html_out += U("				    </a>");
+	html_out += U("             </div>");
+
+	html_out += U("				<div class=\"futured-product-mid\">");
+	html_out += U("					<a href='") + link2_ws + U("' title='") + pr2Name_wString + U("'>");
+	html_out += U("						<div class=\"futured-gname\"><h3>") + pr2Name_wString + U("</h3></div>");
+	html_out += U("						<div class=\"futured-image\"><img src='") + pr2ImageUrl_wString + U("'/></div>");
+	html_out += U("				    </a>");
+	html_out += U("				    </a>");
+	html_out += U("             </div>");
+
+	html_out += U("				<div class=\"futured-product fpLeft\">");
+	html_out += U("					<a href='") + link3_ws + U("' title='") + pr3Name_wString + U("'>");
+	html_out += U("						<div class=\"futured-gname\"><h3>") + pr3Name_wString + U("</h3></div>");
+	html_out += U("						<div class=\"futured-image\"><img src='") + pr3ImageUrl_wString + U("'/></div>");
+	html_out += U("				    </a>");
+	html_out += U("				    </a>");
+	html_out += U("             </div>");
+	return html_out;
+
 
 }
 std::wstring html_generator::html_basketPage(Product product,int count)
@@ -250,10 +320,11 @@ std::wstring html_generator::html_basketPage(Product product,int count)
 	html_out += U("					<img src='") + pImageUrl + U("'>");
 	html_out += U("				</div>");
 	html_out += U("				<script>");
-	html_out += U("							function deleteFromBasket(){var xhttp = new XMLHttpRequest();xhttp.open('DELETE','") + wLink + U("',true);xhttp.send()}");
+	html_out += U("							function deleteFromBasket(){var xhttp = new XMLHttpRequest();xhttp.open('POST','") + wLink + U("',true);xhttp.send()}");
 	html_out += U("				</script>");
+
 	html_out += U("				<div class=\"ordersRemove\">");
-	html_out += U("					<a title=\"Remove\" onclick=\"deleteFromBasket()\"></a>");
+	html_out += U("					<a href='http://localhost:8090/Basket' onclick=\"deleteFromBasket();\" title=\"Remove\"></a>");
 	html_out += U("				</div>");
 	html_out += U("				<div class=\"orderCount\">");
 	html_out += U("					<div class=\"orderInfoframe\">");
@@ -436,7 +507,7 @@ std::wstring html_generator::html_tableListHtml()
 	html_out += U("  </html>\n");
 	return html_out;
 }
-std::wstring html_generator::html_homePage(Company company)
+std::wstring html_generator::html_homePage(std::wstring bodyPartial,Company company)
 {
 	
 	
@@ -450,10 +521,15 @@ std::wstring html_generator::html_homePage(Company company)
 	std::wstring cTelephone = std::wstring(companyTelephone.begin(), companyTelephone.end());
 
 	std::string companyabout = company.Company_getAbout();
-	std::string subAbout = companyabout.substr(0, 800);
+	std::string subAbout;
+	if (companyabout.length() > 800)
+		subAbout = companyabout.substr(0, 800);
+	else
+		subAbout = companyabout;
+	
 	std::wstring cAbout = std::wstring(subAbout.begin(), subAbout.end());
-
-
+	
+	std::wstring f = std::wstring(jquery.begin(), jquery.end());
 	std::wstring html_out;
 	html_out = U("<!DOCTYPE html>\n");
 	html_out += U("    <head>\n");
@@ -467,12 +543,18 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += U("</style>\n");
 	html_out += U("<style>") + std::wstring(stylesheet.begin(), stylesheet.end());
 	html_out += U("</style>");
+	html_out += U("				<script>");
+	html_out += f;
+	html_out += U("				</script>");
+	html_out += U("				<script>");
+	html_out += U("$(document).ready(function(){$('p').click(function() {$(this).hide();});});");
+	html_out += U("				</script>");
 	html_out += U("    </head>\n");
 	html_out += U("    <body>\n");
 	html_out += U("      <div class=\"wrapper\">");
 	html_out += U("          <div class=\"header\">");
 	html_out += U("              <div class=\"hashtag\">");
-	html_out += U("                 <a href=\"#\">#MENCLOTHING</a>");
+	html_out += U("                 <a href=\"https://twitter.com/hashtag/menclothing\">#MENCLOTHING</a>");
 	html_out += U("              </div>");
 	html_out += U("              <div class=\"logo\">");
 	html_out += U("					 <h1><a href=\"http://localhost:8090/\" title='") + cName + U("'>") + cName + U("</a></h1>");
@@ -498,29 +580,10 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += U("				 <img src=\"http://i.imgur.com/U8sFcaJ.jpg\">");
 	html_out += U("          </div>");
 	html_out += U("          <div class=\"featured\">");
-	html_out += U("				<div class=\"titles\"><h2>Featured</h2></div>");
-	html_out += U("				<div class=\"futured-product\" >");
-	html_out += U("					<a href=\"#\" title=\"Product1\">");
-	html_out += U("						<div class=\"futured-gname\"><h3>Jeans</h2></div>");
-	html_out += U("						<div class=\"futured-image\"><img src=\"http://i.imgur.com/fXu6xwa.jpg\"/></div>");
-	html_out += U("				    </a>");
-	html_out += U("             </div>");
-
-	html_out += U("				<div class=\"futured-product-mid\" >");
-	html_out += U("					<a href=\"#\" title=\"Product2\">");
-	html_out += U("						<div class=\"futured-gname\"><h3>Jeans</h2></div>");
-	html_out += U("						<div class=\"futured-image\"><img src=\"http://i.imgur.com/KThfiSM.jpg\"/></div>");
-	html_out += U("				    </a>");
-	html_out += U("             </div>");
-
-	html_out += U("				<div class=\"futured-product fpLeft\" >");
-	html_out += U("					<a href=\"#\" title=\"Product2\">");
-	html_out += U("						<div class=\"futured-gname\"><h3>Jeans</h2></div>");
-	html_out += U("						<div class=\"futured-image\"><img src=\"http://i.imgur.com/T9EJyRn.jpg\"/></div>");
-	html_out += U("				    </a>");
-	html_out += U("             </div>");
+	html_out += U("				<div class=\"titles\"><h2>new arrivals</h2></div>");
+	html_out += bodyPartial;
 	html_out += U("				<div class=\"futured_slogan\"><p>new is always better :)</p></div>");
-	html_out += U("				<div class=\"more-btn\"><a href=\"#\">more...</a></div>");
+	html_out += U("				<div class=\"more-btn\"><a href=\"http://localhost:8090/Products\">more...</a></div>");
 
 
 	html_out += U("            </div>");
@@ -541,20 +604,20 @@ std::wstring html_generator::html_homePage(Company company)
 	html_out += cAbout;
 	html_out += U("						</p>");
 	html_out += U("				</div>");
-	html_out += U("						<div class=\"more-btn btn-about\"><a href=\"#\">more...</a></div>");
+	html_out += U("						<div class=\"more-btn btn-about\"><a href=\"http://localhost:8090/About\">more...</a></div>");
 	html_out += U("			</div>");
 	html_out += U("		</div>");
 	html_out += U("				<div class=\"footer\">");
 	html_out += U("					<ul class=\"footer-ul\">");
-	html_out += U("						<li><a href=\"#\" title=\"Shop\">Shop</a></li>");
-	html_out += U("						<li><a href=\"#\" title=\"Contact\">Contact</a></li>");
-	html_out += U("						<li><a href=\"#\" title=\"About\">About</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/Products\" title=\"Shop\">Shop</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/Contact\" title=\"Contact\">Contact</a></li>");
+	html_out += U("						<li><a href=\"http://localhost:8090/About\" title=\"About\">About</a></li>");
 	html_out += U("				   </ul>");
 	html_out += U("				<div class=\"social-media-container\">");
 	html_out += U("					<div class=\"social-inner\">");
-	html_out += U("						<div class=\"social-media gp\"><a href=\"#\" title=\"Google Plus\"></a></div>");
-	html_out += U("						<div class=\"social-media tw\"><a href=\"#\" title=\"Twitter\"></a></div>");
-	html_out += U("						<div class=\"social-media fb\"><a href=\"#\" title=\"Facebook\"></a></div>");
+	html_out += U("						<div class=\"social-media gp\"><a href=\"https://plus.google.com/+TommyHilfiger/videos\" title=\"Google Plus\"></a></div>");
+	html_out += U("						<div class=\"social-media tw\"><a href=\"https://twitter.com/tommyhilfiger\" title=\"Twitter\"></a></div>");
+	html_out += U("						<div class=\"social-media fb\"><a href=\"https://www.facebook.com/tommyhilfiger\" title=\"Facebook\"></a></div>");
 	html_out += U("				    </div>");
 	html_out += U("				</div>");
 	html_out += U("				<div class=\"dev\">");

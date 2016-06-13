@@ -20,11 +20,22 @@ sqlite_db db("test_db");
 Basket basket = Basket();
 Company company("-1","-1","-1","-1");
 void main_page_responser(http_request request) {
-	std::vector<std::string> table_names;
+	std::wstring html_body;
+	std::vector<int> prIds(3);
+	prIds = db.db_getNewest();
+	std::vector<Product> products;
+	for (int i = 0; i < 3; i++)
+	{
+		int id = prIds.at(i);
+		Product pr = db.db_get_product(id);
+		products.push_back(pr);
+	}
+		
 	html_generator html_gen("http://localhost:8090");
+	html_body = html_gen.html_homePagePartial(products);
 	http_response response(status_codes::OK);
 	response.headers().add(U("Content-Type"), U("text/html; charset=utf-8"));
-	response.set_body(html_gen.html_homePage(company));
+	response.set_body(html_gen.html_homePage(html_body,company));
 	request.reply(response);
 }
 void about_page_responser(http_request request) {
@@ -138,7 +149,7 @@ void admin_page_responser(http_request request) {
 	}
 	else
 	{
-		html_out = html_gen.html_Alert("Wrong username or password:(");
+		html_out = html_gen.html_Alert("Wrong username/password :(");
 		html_out = html_gen.html_render_body(html_out,company);
 	}
 	
@@ -203,6 +214,7 @@ void product_page_responser(http_request request) {
 	std::vector<int> pIds = db.db_getIds();
 	int vecSize = pIds.size();
 	std::wstring out;
+	std::wstring htmlBody;
 	if (path.size() == 1) {
 		std::wstring htmlBody;
 		for (int i = 0; i < vecSize; i++){
@@ -217,7 +229,6 @@ void product_page_responser(http_request request) {
 		std::stringstream pId_s(productId);
 		int id;
 		pId_s >> id;
-		std::wstring htmlBody;
 		Product product = db.db_get_product(id);
 		htmlBody += html_gen.html_productDetailPage(product);
 		out = html_gen.html_render_body(htmlBody, company);
@@ -234,6 +245,7 @@ void product_page_responser(http_request request) {
 		else if (path.at(1) == U("DeleteFromBasket"))
 		{
 			basket.Basket_remove(prBasket);
+
 		}
 		
 	}
@@ -320,6 +332,7 @@ void order_page_responser(http_request request) {
 }
 void server_start()
 {
+	
 	isAdmin = false;
 	listener.support(methods::GET, [](http_request request)
 	{
@@ -480,10 +493,9 @@ int main()
 
 	if (db.open()) {
 		cout << "Can't open database!!!" << endl;
-	}
-	company = db.db_getCompany();
+	}std::vector<std::vector<std::pair<std::string, std::string>>> table_data;
+	company = db.db_getCompany(table_data);
 	server_start();;
-
 	getchar();
 	db.close();
 	listener.close();

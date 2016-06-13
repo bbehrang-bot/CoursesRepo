@@ -194,18 +194,18 @@ int sqlite_db::db_getOrders(std::vector<std::vector<std::pair<std::string, std::
 }
 int sqlite_db::db_getSize()
 {
-
 	sqlite3_stmt * stmt = NULL;
-	char * sqlQuery = "SELECT  COUNT(*) FROM ProductTable";
+	char * sqlQuery = "SELECT  COUNT(*) FROM ProductTable;";
 	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
 	int rc = sqlite3_step(stmt);
 	if (rc == SQLITE_ERROR)
 	{
 		puts("Error : Select Count");
-		exit(1);
 	}
+	printf("%d", rc);
 	int size = sqlite3_column_int(stmt, 0);
 	sqlite3_finalize(stmt);
+	
 	return size;
 }
 Product sqlite_db::db_fillInfo(sqlite3_stmt * stmt)
@@ -259,6 +259,7 @@ std::vector<int> sqlite_db::db_getIds()
 			printf("SQL error: %s\n", zErrMsg);
 			sqlite3_free(zErrMsg);
 		}
+		
 		arr[i] = sqlite3_column_int(stmt, 0);
 	}
 	sqlite3_finalize(stmt);
@@ -418,33 +419,56 @@ int sqlite_db::db_Admin(std::map<std::wstring, std::wstring> row_data)
 	return size;
 
 }
-Company sqlite_db::db_getCompany()
+Company sqlite_db::db_getCompany(std::vector<std::vector<std::pair<std::string, std::string>>>& table_rows)
 {
-	std::string name, telephone, address, about;
-	sqlite3_stmt * stmt = NULL;
-	char * sqlQuery = "SELECT * FROM Company";
-	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
-	int rc = sqlite3_step(stmt);
-	if (rc == SQLITE_ERROR)
-	{
+	std::string name = "noName";
+	std::string telephone = "telephone";
+	std::string address = "address";
+	std::string about = "about";
+	int rc;
+	std::string sql_query;
+	sqlite_db::tmp_sql_results.clear();
+	table_rows.clear();
+
+	sql_query = "SELECT * FROM Company;";
+	rc = sqlite3_exec(db, sql_query.c_str(), sqlite_db::callback, 0, &zErrMsg);
+	if (rc != SQLITE_OK) {
 		printf("SQL error: %s\n", zErrMsg);
 		sqlite3_free(zErrMsg);
+		Company company(name, telephone, about, address);
 	}
-	const unsigned char * cName = sqlite3_column_text(stmt, 0);
-	const unsigned char * ctelephone = sqlite3_column_text(stmt, 1);
-	const unsigned char * caddress = sqlite3_column_text(stmt, 2);
-	const unsigned char * cabout = sqlite3_column_text(stmt, 3);
-	if(cName != NULL)
-		name = std::string(reinterpret_cast<const char*>(cName));
-	if (ctelephone != NULL)
-		telephone = std::string(reinterpret_cast<const char*>(ctelephone));
-	if (caddress != NULL)
-		address = std::string(reinterpret_cast<const char*>(caddress));
-	if (cabout != NULL)
-		about = std::string(reinterpret_cast<const char*>(cabout));
+	table_rows = sqlite_db::tmp_sql_results;
+	int i = 1;
+	for (auto col : table_rows.at(0))
+	{
+		if (i == 1)
+		{
+			name = std::string(col.second.begin(), col.second.end());
+			i++;
+		}
+			
+		else if (i == 2)
+		{
+			telephone = std::string(col.second.begin(), col.second.end());
+			i++;
+		}
+		else if (i == 3)
+		{
+			address = std::string(col.second.begin(), col.second.end());
+			i++;
+		}
+		else if (i == 4)
+		{
+			about = std::string(col.second.begin(), col.second.end());
+			i++;
+		}
+		else
+			break;
+			
+
+	}
 	Company company(name, telephone, about, address);
 
-	sqlite3_finalize(stmt);
 	return company;
 }
 int  sqlite_db::db_placeOrderTable(std::map<std::wstring, std::wstring> row_data,double totalPrice)
@@ -492,7 +516,6 @@ int  sqlite_db::db_placeOrderTable(std::map<std::wstring, std::wstring> row_data
 	else
 	{
 		sqlite3_finalize(stmt);
-		printf("INSIDE THAT SHIT %d", rc);
 		return 1;
 	}
 	free(tel);
@@ -515,7 +538,6 @@ int sqlite_db::db_orderTableId()
 	else
 	{
 		addedId = sqlite3_column_int(stmt, 0);
-		printf("Added id is %d", addedId);
 		sqlite3_finalize(stmt);
 		return addedId;
 	}
@@ -546,4 +568,26 @@ int sqlite_db::db_placeOrder(Product product, int count,int orderTableId)
 		}
 	}
 	return rc;
+}
+
+std::vector<int> sqlite_db::db_getNewest()
+{
+	std::vector<int> products(3);
+	sqlite3_stmt * stmt = NULL;
+	char * sqlQuery = "SELECT * FROM ProductTable ORDER BY Id DESC LIMIT 3;";
+	sqlite3_prepare_v2(db, sqlQuery, strlen(sqlQuery) + 1, &stmt, NULL);
+	int rc;
+	for (int i = 0; i < 3; i++)
+	{
+		rc = sqlite3_step(stmt);
+		if (rc == SQLITE_ERROR)
+		{
+			printf("SQL error: %s\n", zErrMsg);
+			sqlite3_free(zErrMsg);
+		}
+		printf("Rc is %d\n", rc);
+		products[i] = sqlite3_column_int(stmt, 0);
+	}
+	sqlite3_finalize(stmt);
+	return products;
 }

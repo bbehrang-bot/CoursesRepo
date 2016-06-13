@@ -36,8 +36,9 @@ public:
 	std::vector<int> db_search(std::map<std::wstring, std::wstring> row_data);
 	int  db_sendMsg(std::map<std::wstring, std::wstring> row_data);
 	int  db_Admin(std::map<std::wstring, std::wstring> row_data);
-	Company db_getCompany();
+	Company db_getCompany(std::vector<std::vector<std::pair<std::string, std::string>>>& table_rows);
 	int db_placeOrderTable(std::map<std::wstring, std::wstring> row_data,double totalPrice);
 	int db_orderTableId();
 	int db_placeOrder(Product product, int count, int orderTableId);
+	std::vector<int> db_getNewest();
 };
