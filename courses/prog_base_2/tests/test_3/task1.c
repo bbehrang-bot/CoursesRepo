@@ -1,16 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "task1.h"
+
 struct strings_s
 {
     char *first;
-    char *second;
+    char  *second;
 };
 strings_t * strings_new(char * first,char * second){
     if(first == NULL || second == NULL)
         return;
     strings_t * strings =  (strings_t *)(malloc(sizeof(struct strings_s)));
-    int v = strlen(first);
-    strings->first = malloc(strlen(first));
-    strings->second = malloc(strlen(second));
+    strings->first = malloc(strlen(first) * sizeof(char));
+    strings->second = malloc(strlen(first) * sizeof(char));
     strcpy(strings->first,first);
     strcpy(strings->second,second);
     return strings;
@@ -29,17 +32,29 @@ int strings_exist(strings_t * self)
      int matchedSize =0;
      while(self->first[i] != '\0')
      {
-         if((self->first[i] == self->second[j])  || (self->first[i] == '\n'))
+         char qe = self->first[2];
+         char p = self->first[i];
+         char q = self->second[j];
+         if(self->first[i] == '\n')
+             {
+                 i++;
+             }
+         if((self->first[i] == self->second[j]))
          {
-             i++;
-             j++;
              if(self->first[i] != '\n')
              {
                  matchedSize++;
              }
+             i++;
+             j++;
+
          }
          else
-            i++;
+         {
+             i++;
+             break;
+         }
+
      }
      if(matchedSize == sizeSecond)
         return 1;
@@ -48,8 +63,9 @@ int strings_exist(strings_t * self)
 
 }
 void strings_free(strings_t * self){
-    printf("%s",self->first);
+    self->first = malloc(5);
     free(self->first);
+     self->second = malloc(5);
     free(self->second);
     free(self);
 }
