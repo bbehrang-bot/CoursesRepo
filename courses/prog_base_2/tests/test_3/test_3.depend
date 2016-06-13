@@ -1,0 +1,168 @@
+# depslib dependency file v1.0
+1465815686 source:c:\users\bbehrang\music\test_3\cmockatest.c
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<setjmp.h>
+	"task1.h"
+	<cmocka.h>
+
+1426175038 c:\program files (x86)\cmocka\include\cmocka.h
+
+1465822863 source:c:\users\bbehrang\music\test_3\main.c
+	<stdio.h>
+	<stdlib.h>
+	"task1.h"
+	<stdlib.h>
+	<stdarg.h>
+	<stddef.h>
+	<setjmp.h>
+	<cmocka.h>
+	"user.h"
+	"blog.h"
+	"list.h"
+	"post.h"
+	"database.h"
+	"student.h"
+
+1465810220 c:\users\bbehrang\music\test_3\task1.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1465815771 source:c:\users\bbehrang\music\test_3\task1.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"task1.h"
+
+1465809102 c:\users\bbehrang\music\test_3\cmockatest.h
+
+1465819219 source:c:\users\bbehrang\music\test_3\blog.c
+	<stdio.h>
+	<stdlib.h>
+	"blog.h"
+	"post.h"
+	"list.h"
+	"user.h"
+
+1465814804 c:\users\bbehrang\music\test_3\blog.h
+
+1465817037 c:\users\bbehrang\music\test_3\post.h
+
+1464799746 c:\users\bbehrang\music\test_3\list.h
+	<stdlib.h>
+
+1465814422 c:\users\bbehrang\music\test_3\user.h
+	<stdio.h>
+	<stdlib.h>
+
+1464799746 source:c:\users\bbehrang\music\test_3\list.c
+	<stdlib.h>
+	"list.h"
+
+1465818505 source:c:\users\bbehrang\music\test_3\post.c
+	<stdio.h>
+	<stdlib.h>
+	"blog.h"
+	"list.h"
+	"post.h"
+	"comment.h"
+
+1465817489 source:c:\users\bbehrang\music\test_3\user.c
+	<stdio.h>
+	<stdlib.h>
+	"user.h"
+
+1465818495 source:c:\users\bbehrang\music\test_3\comment.c
+	<stdio.h>
+	<stdlib.h>
+	"blog.h"
+	"list.h"
+	"post.h"
+	"comment.h"
+
+1465818462 c:\users\bbehrang\music\test_3\comment.h
+
+1450774966 source:c:\users\bbehrang\music\test_3\sqllite\sqlite3.c
+	<vxWorks.h>
+	<pthread.h>
+	"mingw.h"
+	"_mingw.h"
+	<stdarg.h>
+	"config.h"
+	<stdint.h>
+	<inttypes.h>
+	<intrin.h>
+	<cmnintrin.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<stddef.h>
+	<TargetConditionals.h>
+	<ctype.h>
+	<time.h>
+	<sys/sysctl.h>
+	<malloc/malloc.h>
+	<libkern/OSAtomic.h>
+	<malloc.h>
+	<pthread.h>
+	"windows.h"
+	<sys/cygwin.h>
+	<errno.h>
+	<process.h>
+	<math.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<unistd.h>
+	<sys/time.h>
+	<errno.h>
+	<sys/mman.h>
+	<sys/ioctl.h>
+	<sys/file.h>
+	<sys/param.h>
+	<semaphore.h>
+	<limits.h>
+	<sys/mount.h>
+	<utime.h>
+	<sys/dcmd_blk.h>
+	<sys/statvfs.h>
+	<dlfcn.h>
+	<tcl.h>
+	"sqlite3rtree.h"
+	<unicode/utypes.h>
+	<unicode/uregex.h>
+	<unicode/ustring.h>
+	<unicode/ucol.h>
+	<unicode/ubrk.h>
+	<unicode/utf16.h>
+	<ctype.h>
+	<math.h>
+
+1465822839 source:c:\users\bbehrang\music\test_3\database.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"sqllite/sqlite3.h"
+	"database.h"
+	"student.h"
+
+1450774966 c:\users\bbehrang\music\test_3\sqllite\sqlite3.h
+	<stdarg.h>
+
+1465822827 c:\users\bbehrang\music\test_3\database.h
+	"student.h"
+
+1465822152 source:c:\users\bbehrang\music\test_3\student.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"student.h"
+
+1465821913 c:\users\bbehrang\music\test_3\student.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
