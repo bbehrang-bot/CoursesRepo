@@ -1,0 +1,574 @@
+body{
+  overflow: hidden;
+}
+h1,h2,h3,h4,a,p,span{
+  margin: 0;
+  padding: 0;
+}
+html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+}
+body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+}
+a{
+  text-decoration: none;
+}
+.wrapper{
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      overflow:hidden;
+
+}
+.landing{
+      width: 100%;
+      height: 670px;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-transition: all 600ms cubic-bezier(0.47, 0, 0.745, 0.715);
+      transition:         all 600ms cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+.landing_image_container{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+}
+.landing_image_container img{
+  max-width: 100%;
+}
+.artists{
+  width: 100%;
+  height: 670px;
+  position: relative;
+  z-index: 1;
+}
+body {
+  background-color: #222;
+  padding: 100px 0 0 0;
+}
+p {
+  margin-left: -55px;
+}
+@-webkit-keyframes ani-mouse {
+	0% {
+	opacity: 1;
+	top: 29%;
+	}
+	15% {
+	opacity: 1;
+	top: 50%;
+	}
+	50% {
+	opacity: 0;
+	top: 50%;
+	}
+	100% {
+	opacity: 0;
+	top: 29%;
+	}
+}
+@-moz-keyframes ani-mouse {
+	0% {
+	opacity: 1;
+	top: 29%;
+	}
+	15% {
+	opacity: 1;
+	top: 50%;
+	}
+	50% {
+	opacity: 0;
+	top: 50%;
+	}
+	100% {
+	opacity: 0;
+	top: 29%;
+	}
+}
+@keyframes ani-mouse {
+	0% {
+	opacity: 1;
+	top: 29%;
+	}
+	15% {
+	opacity: 1;
+	top: 50%;
+	}
+	50% {
+	opacity: 0;
+	top: 50%;
+	}
+	100% {
+	opacity: 0;
+	top: 29%;
+	}
+}
+ .scroll-btn {
+    width: 54px;
+     height: 168px;
+     margin: auto;
+     display: block;
+     position: absolute;
+     /* left: 0; */
+     right: 0;
+     top: 50%;
+     /* bottom: 0; */
+     z-index: 5;
+     text-align: center;
+}
+.scroll-btn > * {
+  display: inline-block;
+line-height: 18px;
+font-size: 13px;
+margin: 0 auto;
+font-weight: normal;
+color: #7f8c8d;
+color: #ffffff;
+font-family: 'bebas';
+font-size: 1.5em;
+line-height: 1.3em;
+font-weight: bold;
+}
+.scroll-btn > *:hover,
+.scroll-btn > *:focus,
+.scroll-btn > *.active {
+	color: #ffffff;
+}
+.scroll-btn > *:hover,
+.scroll-btn > *:focus,
+.scroll-btn > *:active,
+.scroll-btn > *.active {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+.scroll-btn .mouse {
+	position: relative;
+	display: block;
+	width: 35px;
+	height: 55px;
+	margin: 0 auto 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 3px solid white;
+	border-radius: 23px;
+}
+.scroll-btn .mouse > * {
+	position: absolute;
+	display: block;
+	top: 29%;
+	left: 50%;
+	width: 8px;
+	height: 8px;
+	margin: -4px 0 0 -4px;
+	background: white;
+	border-radius: 50%;
+	-webkit-animation: ani-mouse 2.5s linear infinite;
+	-moz-animation: ani-mouse 2.5s linear infinite;
+	animation: ani-mouse 2.5s linear infinite;
+}
+.scroll p{
+  font-family: 'bebas';
+}
+.artistsHome{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  }
+  .artists{
+    position: absolute;
+    right:-100%;
+    z-index: 2;
+    -webkit-transition: all 600ms cubic-bezier(0.47, 0, 0.745, 0.715);
+    transition:         all 600ms cubic-bezier(0.47, 0, 0.745, 0.715);
+    background: black;
+  }
+.inner{
+  width: 100%;
+  overflow: hidden;
+  height:100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+header{
+  width: 100%;
+  height: 125px;
+  overflow: hidden;
+  background:#2c3e50;
+}
+.navLeft{
+  width: 30%;
+height: 130px;
+float: left;
+margin-left: 5%;
+position: relative;
+z-index: 3;
+}
+.logo h1{
+  font-family: 'lovelo';
+color: #fff;
+display: block;
+font-size: 3em;
+margin-top: 40px;
+float: left;
+  transition: all 300ms cubic-bezier(0.25, 0.025, 0.675, 0.19);
+}
+.logo{
+  height: 100%;
+  width: 70%;
+  margin-left: 10%;
+  float: left;
+}
+.menu{
+      float: left;
+      margin-top: 63px;
+      position: relative;
+      width: 30px;
+      height: 50px;
+      cursor: pointer;
+}
+.menu_bars{
+  background-color: white;
+  width: 30px;
+  height: 3px;
+  float: right;
+  clear: right;
+  margin-bottom: 8px;
+  transition: all 200ms cubic-bezier(0.25, 0.025, 0.675, 0.19);
+  position: absolute;
+  top: 0;
+}
+#menu_bar2{
+  top: 8px;
+}
+#menu_bar3{
+  top:16px;
+}
+.midImage{
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+.midImage img{
+  max-width: 100%;
+}
+.navRight{
+  width: 39%;
+  height: 250px;
+  overflow: hidden;
+  float: right;
+  position: fixed;
+  z-index: 3;
+  right: 0;
+}
+.polygon_nowPLaying{
+    width: 12%;
+    height: 25%;
+    margin-top: 40px;
+    float: right;
+    transition: all 400ms;
+    -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
+    background: rgba(255, 255, 255, 0.6);
+    position: relative;
+    z-index: 3;
+}
+.menuNav{
+  width: 0;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.59);
+  position:fixed;
+  left: 0;
+  z-index: 1;
+  padding-top: 150px;
+  -webkit-transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition:         all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+ overflow: hidden;
+ z-index: 3;
+}
+.menuNav_links{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'bebas';
+  font-size: 2em;
+  color: #000;
+  font-weight: bold;
+  -webkit-transition: all 800ms;
+  transition:         all 800ms;
+  transition: width 300ms;
+  opacity: 0;
+  height: 60px;
+  line-height: 60px;
+  margin: 0 auto;
+  margin-bottom: 83px;
+  position: relative;
+}
+nav{
+      width: 100%;
+      height: 415px;
+      margin-top: 23px;
+}
+.inBox{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+  opacity: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+    transition:         all 500ms;
+}
+.login_register{
+  width: 100%;
+  height: 50px;
+}
+.login_register_links{
+  display: block;
+  width: 50%;
+  height: 100%;
+  line-height: 50px;
+  position: relative;
+  text-align: center;
+  font-family: 'bebas';
+  font-size: 1.8em;
+  color: #000;
+  font-weight: bold;
+  float: left;
+}
+.nowPlaying_texts{
+  width: 60%;
+  height: 40px;
+  margin: 0 auto;
+  font-family: 'bebas';
+  font-size: 2em;
+  font-weight: bold;
+  overflow: hidden;
+  letter-spacing: 0.06em;
+  display: none;
+  opacity: 0;
+  transition: all 300ms;
+}
+.music_player_closed{
+  position: absolute;
+   right: 8%;
+   top: 10%;
+   width: 50px;
+   height: 50px;
+}
+.music_player_closed span{
+  display: block;
+  float: right;
+  width: 19%;
+  font-size: 3em;
+  cursor: pointer;
+  transition: all 300ms;
+  position: absolute;
+}
+.music_player_closed span:hover{
+  color:#fff;
+}
+.nowPlaying_artist{
+  width: 70%;
+  margin-right: 5%;
+  height: 60px;
+  float: right;
+}
+.nowPlaying_artist span{
+  display: block;
+  margin-top: 30px;
+}
+.nowPlaying_song{
+  width: 60%;
+  margin-right: 5%;
+  height: 60px;
+  float: right;
+  margin-top: 8px;
+  font-size: 1.6em;
+}
+.music_player{
+  float: right;
+clear: both;
+width: 41%;
+height: 50px;
+display: none;
+opacity: 0;
+transition: all 300ms;
+}
+.music_player span{
+  display: block;
+  width: 65px;
+  height: 40px;
+  float: left;
+  cursor: pointer;
+  transition: all 300ms;
+}
+.landin_image{
+  transition: all 10000ms;
+}
+.music_player span:hover{
+  color: #fff;
+}
+.music_player .icon-play,.icon-pause{
+  font-size: 3em;
+}
+.icon-pause{
+  font-size:2.6em;
+}
+.music_player .icon-backward,.icon-forward{
+  font-size: 2em;
+}
+.music_player .icon-forward{
+}
+.welcome{
+      position: absolute;
+      z-index: 2;
+      width: 40%;
+      height: 205px;
+      margin: auto;
+      line-height: 3.5em;
+      top: 50%;
+      /* bottom: 0; */
+      right: 0;
+      left: 0;
+}
+.welcome h2{
+  font-family: 'lovelo';
+  font-size: 2em;
+  color: #fff;
+  text-align: center;
+  line-height: 2em;
+}
+.learn_more{
+  display: block;
+  width: 44%;
+  height: 55px;
+  text-align: center;
+  color: white;
+  /* background: white; */
+  border: 2px solid white;
+  margin: auto;
+  font-family: 'lovelo';
+  line-height: 55px;
+  font-size: 1.1em;
+  -webkit-transition: all 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
+transition:         all 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
+margin-top: 20px;
+}
+.learn_more:hover{
+  background:white;
+  color: black;
+}
+.artistLeft{
+  width: 30%;
+    height: 80%;
+    margin-top: 125px;
+    position: relative;
+    float: left;
+    margin-left: 5%;
+}
+.artistImage{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.artistImage img{
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+.artistHover{
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.83);
+  transform: scale(1.5);
+  display: block;
+  -webkit-transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition:         all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 4;
+  opacity: 0;
+}
+.artistMid{
+      width: 30%;
+      height: 91%;
+      margin-top: 50px;
+      position: relative;
+      float: left;
+      margin-left: 3%;
+}
+.artistMid .artistImage img{
+  top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+}
+.artistRight{
+  float: right;
+  width: 30%;
+    height: 80%;
+    margin-top: 125px;
+    position: relative;
+    float: left;
+}
+.artistFrames{
+  width: 29%;
+  margin-left: 3%;
+  overflow: hidden;
+}
+.artistHoverRows{
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  margin-top: 40px;
+  color: #fff;
+  font-family: 'lovelo';
+}
+.artistInfo{
+  width: 100%;
+  height: 320px;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+}
+.artistName{
+  font-size: 3em;
+}
+.artistHoverName{
+  height: 235px;
+}
+.artistHoverRows h1,h2,h3,h4,h5{
+      display: block;
+      width: 90%;
+      margin: auto;
+      height: 100%;
+      overflow: hidden;
+      word-wrap: break-word;
+      text-overflow: ellipsis;
+}
+.artistListeners{
+        font-size: 1.4em;
+}
