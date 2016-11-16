@@ -10,6 +10,7 @@ var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var route = express.Router();
 mongoose.connect('mongodb://localhost/loginapp');
+var db = mongoose.connection;
 //Models
 
 //Song = require('./models/songs.js');
@@ -21,31 +22,29 @@ var albumController = require('./routes/albumController.js');
 var artistController = require('./routes/artistController.js');
 var userController = require('./routes/userController.js');
 //var songController = require('./routes/artistController.js');
-//connect to mongoose
-
-var db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function() {
-  // Create your schemas and models here.
-});
-// view engine setup
 var app = express();
-app.use(bodyParser.json());
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use("/media",express.static(path.join(__dirname + '/media')));
-app.use(passport.initialize());
-app.use(passport.session());
+
+//bodyParser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(cookiePaser());
+//static folder
+app.use("/media",express.static(path.join(__dirname + '/media')));
+//express session
 app.use(session({
     secret: 'secret',
     saveUninitialized: true,
     resave: true
 }));
+//passportInit
+app.use(passport.initialize());
+app.use(passport.session());
 // Express Validator
-app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
+  app.use(expressValidator({
+    errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
       , root    = namespace.shift()
       , formParam = root;
@@ -71,7 +70,7 @@ app.use(function (req, res, next) {
   res.locals.user = req.user || null;
   next();
 });
-app.use(cookiePaser());
+
 app.use('/',indexController);
 app.use('/artists',artistController);
 app.use('/albums',albumController);

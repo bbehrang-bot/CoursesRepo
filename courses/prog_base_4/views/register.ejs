@@ -10,13 +10,14 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-
-              <li role="presentation"><a href="/">Dashboard</a></li>
-              <li role="presentation"><a href="/users/logout">Logout</a></li>
-
-              <li role="presentation"><a href="/users/login">Login</a></li>
-              <li role="presentation"><a href="/users/register">Register</a></li>
-
+						<% if(user) { %>
+							<li role="presentation"><a href="/">Dashboard</a></li>
+							<li role="presentation"><a href="/users/logout">Logout</a></li>
+						<%} %>
+						<% if(!user) { %>
+							<li role="presentation"><a href="/users/login">Login</a></li>
+							<li role="presentation"><a href="/users/register">Register</a></li>
+						<%} %>
           </ul>
         </nav>
         <h3 class="text-muted">LoginApp</h3>
@@ -34,13 +35,14 @@
             <% if(error != '') {%>
             <div class="alert alert-danger"><%=error%></div>
             <%} %>
-          <!---okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk-->
+
           <% if(typeof errors != 'undefined'){ %>
             <% errors.forEach(function(elements){ %>
               <div class="alert alert-danger"><%= elements.msg %></div>
             <%}); %>
 
           <%} %>
+            <!---okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk-->
           <form method="post" action="/users/register">
              <div class="form-group">
               <label>Name</label>
