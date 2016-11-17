@@ -7,9 +7,11 @@ var expressValidator = require('express-validator');
 var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
+var engine = require('ejs-mate');
 var LocalStrategy = require('passport-local').Strategy;
 var route = express.Router();
-mongoose.connect('mongodb://localhost/loginapp');
+//mongoose.connect('mongodb://localhost/loginapp');
+mongoose.connect('mongodb://localhost/musicstore');
 var db = mongoose.connection;
 //Models
 
@@ -21,9 +23,11 @@ var songController = require('./routes/songController.js');
 var albumController = require('./routes/albumController.js');
 var artistController = require('./routes/artistController.js');
 var userController = require('./routes/userController.js');
-//var songController = require('./routes/artistController.js');
+var fileUploadController = require('./routes/fileUploadController.js');
+var ajaxController = require('./routes/ajaxController.js');
 var app = express();
 // view engine setup
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -33,6 +37,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookiePaser());
 //static folder
 app.use("/media",express.static(path.join(__dirname + '/media')));
+app.use("/public",express.static(path.join(__dirname + '/public')));
+app.use("/artistsMedia",express.static(path.join(__dirname + '/artistsMedia')));
 //express session
 app.use(session({
     secret: 'secret',
@@ -43,7 +49,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 // Express Validator
-  app.use(expressValidator({
+app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
       , root    = namespace.shift()
@@ -75,6 +81,9 @@ app.use('/',indexController);
 app.use('/artists',artistController);
 app.use('/albums',albumController);
 app.use('/users',userController);
+app.use('/file',fileUploadController);
+app.use('/songs',songController);
+app.use('/ajax',ajaxController);
 
 //app.use('/songs',songController);
 
