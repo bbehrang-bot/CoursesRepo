@@ -10,22 +10,40 @@ var artistsSchema = mongoose.Schema({
   albums:{
     type:[{type:mongoose.Schema.Types.ObjectId,ref :'Album'}]
   },
-  listened:{
+  priority:{
     type:Number
+  },
+  images:{
+    artistPage : {type:String},
+    logo : {type:String},
+    otherImgs : [{type:String}]
   }
-
 });
 var Artist = module.exports =  mongoose.model('Artist',artistsSchema);
 //Get artists
 
-module.exports.getArtists = function(callback,limit){
+//Index page methods
+module.exports.getArtistsByPriority = function(lastPriority,limit,callback){
+  var query = {"priority" : 1}
+  Artist.find({priority : {$gt:lastPriority}}).sort(query).limit(limit).exec(callback);
+}
+module.exports.getArtistLastPriority = function(callback){
+  var query = {"priority" : -1}
+  Artist.find().sort(query).limit(1).exec(callback);
+}
+module.exports.getArtists = function(limit,callback){
   Artist.find(callback).limit(limit);
 }
-module.exports.getArtistsFull = function(callback,limit)
+module.exports.getArtistById = function(id,callback){
+  Artist.findById(id,callback);
+}
+
+module.exports.searchArtistsByName = function(name,limit,callback){
+  var query = {'name' : new RegExp('^'+name,"i")}
+  Artist.find(query,callback).limit(limit);
+}
+module.exports.getArtistByName = function(name,callback)
 {
-  Artist.find().limit(1)
-      .populate({
-      path:'albums'
-      ,populate :{path:'albums'}
-    }).exec(callback);
+  var query = {name : name};
+  Artist.findOne(query,callback);
 }

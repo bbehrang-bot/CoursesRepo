@@ -25,7 +25,6 @@ router.post('/fromLanding',function(req,res)
 });
 router.post('/',function(req,res){
   var priority = req.body.lastPriority;
-  
   var lastPriority = 0;
   Artist.getArtistLastPriority(function(err,artist){
     if(err)
@@ -50,16 +49,5 @@ router.post('/',function(req,res){
       });
     }
   });
-
-
-
 });
-function ensureAuthenticated(req,res,next){
-  if(req.isAuthenticated())
-    return next();
-    else{
-      req.flash('error','You are not logged in');
-      res.redirect('/users/login');
-    }
-}
 module.exports = router;
