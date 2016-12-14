@@ -20,6 +20,18 @@ router.get('/add',function(req,res)
 {
   res.render("Album/Add/AlbumAdd");
 });
+router.post('/add/submit',function(req,res){
+  Artist.getArtistsFullInfoByName(req.body.name,function(err,artist){
+    if(err)
+    {
+      res.render('Error/somethingwrong',{error:err});
+    }
+    else
+    {
+      res.send({artist:artist});
+    }
+  });
+});
 router.post('/add',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -38,14 +50,14 @@ router.post('/add',function(req,res){
   upload(req,res,function(err)
   {
     if(err)
-      res.render('Error/somethingwrong');
+      res.render('Error/somethingwrong',{error:err});
       else{
         var album = new AlbumModel({
-          name : req.body.albumName,
-          coverArt : req.files['coverArt'][0].destination + '/' + req.files['coverArt'][0].filename,
+          name : req.body.albumName.toLowerCase(),
+          coverArt : '/' +req.files['coverArt'][0].destination + '/' + req.files['coverArt'][0].filename,
           price : req.body.price,
           description:req.body.description,
-          artist:req.body.name,
+          artist:req.body.name.toLowerCase(),
           genre:req.body.genre,
           songs:[]
         });
@@ -54,8 +66,8 @@ router.post('/add',function(req,res){
           var song = new SongModel({
             name : req.files['songs'][i].originalname,
             album : req.body.albumName,
-            artist:req.body.name,
-            songPath : req.files['songs'][i].destination + '/'+req.files['songs'][i].filename
+            artist:req.body.name.toLowerCase(),
+            songPath : '/' +req.files['songs'][i].destination + '/'+req.files['songs'][i].filename
           });
           album.songs.push(song);
           Song.addSong(song,function(err,callback){

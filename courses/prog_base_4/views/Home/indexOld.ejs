@@ -107,89 +107,57 @@
           url: '/fromLanding',
           contentType : 'application/json',
           method : 'POST',
-
           data: JSON.stringify({priority:0}),
           success : function(response){
             var artists = response.artists;
-
             lastArtistPriority = response.artists[2].priority;
             var artistLeft = $(".artistLeft");
             var artistMid = $(".artistMid");
             var artistRight = $(".artistRight");
 
+            artistLeft.find(".indexArtist").attr("title",artists[1].name);
+            artistLeft.find(".artistName").append(artists[1].name);//
+            artistLeft.find(".artistListeners").append("Released Albums : " + artists[1].albums.length);
+            artistLeft.find(".artistImage").children().attr("src","/" + artists[1].images.artistPage);
 
-            if(typeof(artists[1]) != 'undefined')
-            {
-              artistLeft.find('.indexArtist').prop("href","/artists/"+artists[1].name);
-              artistLeft.find(".indexArtist").attr("title",artists[1].name);
-              artistLeft.find(".artistName").html(artists[1].name);//
-              artistLeft.find(".artistListeners").html("Released Albums : " + artists[1].albums.length);
-              artistLeft.find(".artistImage").children().attr("src",artists[1].images.artistPage);
-            }
-
-            if(typeof(artists[0]) != 'undefined')
-            {
-            artistMid.find('.indexArtist').prop("href","/artists/"+artists[0].name);
             artistMid.find(".indexArtist").attr("title",artists[0].name);
-            artistMid.find(".artistName").html(artists[0].name);
-            artistMid.find(".artistListeners").html("Released Albums : " + artists[0].albums.length);
-            artistMid.find(".artistImage").children().attr("src", artists[0].images.artistPage);
-            }
-            if(typeof(artists[2]) != 'undefined')
-            {
-            artistRight.find('.indexArtist').prop("href","/artists/"+artists[2].name);
+            artistMid.find(".artistName").append(artists[0].name);
+            artistMid.find(".artistListeners").append("Released Albums : " + artists[0].albums.length);
+            artistMid.find(".artistImage").children().attr("src","/" + artists[0].images.artistPage);
+
             artistRight.find(".indexArtist").attr("title",artists[2].name);
-            artistRight.find(".artistName").html(artists[2].name);
-            artistRight.find(".artistListeners").html("Released Albums : " + artists[2].albums.length);
-            artistRight.find(".artistImage").children().attr("src",artists[2].images.artistPage);
-            }
+            artistRight.find(".artistName").append(artists[2].name);
+            artistRight.find(".artistListeners").append("Released Albums : " + artists[2].albums.length);
+            artistRight.find(".artistImage").children().attr("src","/" + artists[2].images.artistPage);
           }
         });
       });
       $(".artistsHome").on('mousewheel',function(){
-        $.ajax({
+        var myAjax = $.ajax({
           url: '/',
           contentType : 'application/json',
           method : 'POST',
-          beforeSend: function(){
-            $(".artistFrames").css({"opacity":"0"});
-          },
           data: JSON.stringify({lastPriority : lastArtistPriority}),
           success : function(response){
-            var last = response.artists.length - 1;
-            lastArtistPriority = response.artists[last].priority;
+            lastArtistPriority = response.artists[2].priority;
             var artists = response.artists;
             var artistLeft = $(".artistLeft");
             var artistMid = $(".artistMid");
             var artistRight = $(".artistRight");
-            if(typeof(artists[1]) != 'undefined')
-            {
-              artistLeft.find('.indexArtist').prop("href","/artists/"+artists[1].name);
-              artistLeft.find(".indexArtist").attr("title",artists[1].name);
-              artistLeft.find(".artistName").html(artists[1].name);//
-              artistLeft.find(".artistListeners").html("Released Albums : " + artists[1].albums.length);
-              artistLeft.find(".artistImage").children().attr("src",artists[1].images.artistPage);
-            }
+            artistLeft.find(".indexArtist").attr("title",artists[1].name);
+            artistLeft.find(".artistName").html(artists[1].name);//
+            artistLeft.find(".artistListeners").html("Released Albums : " + artists[1].albums.length);
+            artistLeft.find(".artistImage").children().attr("src","/" + artists[1].images.artistPage);
 
-            if(typeof(artists[0]) != 'undefined')
-            {
-            artistMid.find('.indexArtist').prop("href","/artists/"+artists[0].name);
             artistMid.find(".indexArtist").attr("title",artists[0].name);
             artistMid.find(".artistName").html(artists[0].name);
             artistMid.find(".artistListeners").html("Released Albums : " + artists[0].albums.length);
-            artistMid.find(".artistImage").children().attr("src", artists[0].images.artistPage);
-            }
-            if(typeof(artists[2]) != 'undefined')
-            {
-            artistRight.find('.indexArtist').prop("href","/artists/"+artists[2].name);
+            artistMid.find(".artistImage").children().attr("src","/" + artists[0].images.artistPage);
+
             artistRight.find(".indexArtist").attr("title",artists[2].name);
             artistRight.find(".artistName").html(artists[2].name);
             artistRight.find(".artistListeners").html("Released Albums : " + artists[2].albums.length);
-            artistRight.find(".artistImage").children().attr("src",artists[2].images.artistPage);
-          }
-        },
-          complete: function(){
-            $(".artistFrames").css({"opacity":"1"});
+            artistRight.find(".artistImage").children().attr("src","/" + artists[2].images.artistPage);
           }
         });
       });
