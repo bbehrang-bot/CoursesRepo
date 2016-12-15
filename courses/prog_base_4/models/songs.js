@@ -15,7 +15,7 @@ var songsSchema = mongoose.Schema({
   },
   trackNumber:{
     type:Number,
-    defualt : 1
+    default : 1
   },
   lyrics:{
     type:String,
@@ -24,6 +24,10 @@ var songsSchema = mongoose.Schema({
   songPath:{
     type:String,
     default : null
+  },
+  artist:{
+    type:String,
+    required:true
   }
   /*album:{
     type:[{type:mongoose.Schema.Types.ObjectId,ref :'Album'}]
@@ -46,4 +50,15 @@ module.exports.updateSong = function(id,song,options,callback){
   var query = {_id :id };
   var update = {'$set' :song};
   Song.findOneAndUpdate(query,update,options,callback);
+}
+module.exports.getSongById = function(id,callback){
+  Song.findById(id,callback);
+}
+module.exports.deleteSong = function(id, callback){
+  var query = {_id: id};
+  Song.remove(query, callback);
+};
+module.exports.findSongByArtistName = function(name,callback){
+  var query = {artist : name};
+  Song.find(query,callback);
 }

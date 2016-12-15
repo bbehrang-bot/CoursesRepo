@@ -30,7 +30,7 @@ router.post('/add',function(req,res){
     },
     filename: function (req, file, cb) {
       console.log(file);
-      cb(null, req.body.name.toLowerCase() +'_'+ file.fieldname +'_'+ file.originalname) //Appending extension
+      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
   });
@@ -43,32 +43,42 @@ router.post('/add',function(req,res){
     //console.log(req.files);
     //console.log(req.files.fieldname);
     if(err)
-      res.render('Error/somethingwrong');
+      res.render('Error/somethingwrong',{error:err});
       else{
-        var artist = new ArtistModel({
-          name : req.body.name.toLowerCase(),
-          description:req.body.description,
-          images:{
-            artistPage:'/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename,
-            logo: '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename,
-            otherImgs:[]
-          }
-        });
-        for(var i=0;i<req.files['otherImgs'].length;i++)
-        {
-          artist.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
-        }
-        Artist.addArtist(artist,function(err,callback){
+        Artist.getArtistLastPriority(function(err,lastprio){
           if(err)
           {
-            res.render('Error/somethingwrong',{error:err});
+          res.render('Error/somethingwrong',{error:err});
           }
           else{
-            res.send("created");
+            var lastPr = lastprio.priority;
+            console.log(lastprio);
+            var artist = new ArtistModel({
+              name : req.body.name.toLowerCase(),
+              description:req.body.description,
+              images:{
+                artistPage:'/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename,
+                logo: '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename,
+                otherImgs:[]
+              }
+            });
+            console.log(artist);
+            for(var i=0;i<req.files['otherImgs'].length;i++)
+            {
+              artist.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
+            }
+            Artist.addArtist(artist,function(err,callback){
+              if(err)
+              {
+                res.render('Error/somethingwrong',{error:err});
+              }
+              else{
+                res.send("created");
+              }
+            });
           }
         });
       }
-
   });
 });
 router.post('/add/aristName',function(req,res){
@@ -101,6 +111,19 @@ router.post('/songs',function(req,res){
       }
       else{
         res.send({songs:songs});
+      }
+    });
+});
+router.post('/albums/songs',function(req,res){
+    var artistName = req.body.artistName;
+    var albumName =  req.body.albumName
+    Album.getAllAlbumsSongsByName(artistName,albumName,function(err,albums){
+      if(err)
+      {
+        res.render('Error/somethingwrong',{error:err});
+      }
+      else{
+        res.send({albums:albums});
       }
     });
 });

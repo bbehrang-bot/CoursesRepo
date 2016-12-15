@@ -17,7 +17,7 @@ router.get('/',function(req,res)
 {
   res.render('fileUpload');
 });
-router.post('/',upload.single('imgTest'),function(req,res)
+router.post('/',upload.single('songFile'),function(req,res)
 {
   res.render('imgTest',{img:req.file});
 });

@@ -40,7 +40,7 @@ router.post('/add',function(req,res){
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      cb(null, req.body.name +'_'+ req.body.albumName +'_'+ file.originalname) //Appending extension
+      cb(null, req.body.name +'-'+ req.body.albumName +'-'+ file.originalname + Date.now()) //Appending extension
     },
 
   });

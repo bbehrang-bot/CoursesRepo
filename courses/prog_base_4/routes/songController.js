@@ -160,6 +160,8 @@ router.delete('/api/:id',function(req,res)
 
   });
 });
+
+module.exports = router;
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated(),req.user.type=="admin"){
 		return next();
@@ -168,4 +170,3 @@ function ensureAuthenticated(req, res, next){
 		res.redirect('/users/login');
 	}
 }
-module.exports = router;

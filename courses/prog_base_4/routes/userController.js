@@ -45,11 +45,11 @@ passport.deserializeUser(function(id, done) {
 });
 router.get('/register',function(req,res)
 {
-  res.render('user/register');
+  res.render('user/register',{csrfToken:req.csrfToken()});
 });
 router.get('/login',function(req,res)
 {
-  res.render('user/login');
+  res.render('user/login',{csrfToken:req.csrfToken()});
 });
 router.post('/register',function(req,res)
 {
@@ -117,9 +117,18 @@ router.post('/register',function(req,res)
 });
 
 router.post('/login',
-  passport.authenticate('local',{successRedirect:'/',failureRedirect:'/users/login',failureFlash:true}),
+  passport.authenticate('local',{failureRedirect:'/users/login',failureFlash:true}),
   function(req, res) {
-    res.redirect('/');
+    if(req.session.OldUrl){
+      console.log(req.session.OldUrl);
+      var old = req.session.OldUrl;
+      req.session.OldUrl = null;
+      res.redirect(old);
+    }
+    else
+    {
+      res.redirect('/');
+    }
   });
 router.get('/logout',function(req,res)
   {

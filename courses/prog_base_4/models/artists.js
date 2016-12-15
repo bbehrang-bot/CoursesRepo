@@ -11,7 +11,7 @@ var artistsSchema = mongoose.Schema({
     type:[{type:mongoose.Schema.Types.ObjectId,ref :'Album'}]
   },
   priority:{
-    type:Number
+    type:Number,
   },
   images:{
     artistPage : {type:String},
@@ -20,9 +20,43 @@ var artistsSchema = mongoose.Schema({
   }
 });
 var Artist = module.exports =  mongoose.model('Artist',artistsSchema);
-//Get artists
+//Get artist funcs
+module.exports.getArtists = function(callback,limit){
+  Artist.find(callback).limit(limit);
+}
+module.exports.getArtistById = function(id,callback){
+  Artist.findById(id,callback);
+}
+module.exports.getArtistByName = function(name,callback)
+{
+  var query = {name : name};
+  Artist.findOne(query,callback);
+}
 
-//Index page methods
+module.exports.getArtistsWithAlbums = function(callback,limit){//returns artists with albums info(except songInfo, see getArtistsFullInfo)
+  Artist.find()
+      .populate({
+      path : 'albums',
+      populate :{path:'albums'}
+    }).limit(limit).exec(callback);
+}
+module.exports.getArtistsFullInfo = function(callback,limit){//returns artists with albums info(except songInfo, see getArtistsFull)
+  Artist.find()
+      .populate({
+      path : 'albums',
+      populate :{path:'albums'}
+    }).limit(limit).exec(callback);
+}
+module.exports.getArtistsFullInfoByName = function(name,callback){//returns artists with albums info(except songInfo, see getArtistsFull)
+  var query = {name : name};
+  Artist.findOne(query)
+      .populate({
+      path : 'albums',
+      populate :{path:'albums'}
+    }).exec(callback);
+}
+//
+//Priority Related funcs
 module.exports.getArtistsByPriority = function(lastPriority,limit,callback){
   var query = {"priority" : 1}
   Artist.find({priority : {$gt:lastPriority}}).sort(query).limit(limit).exec(callback);
@@ -31,19 +65,41 @@ module.exports.getArtistLastPriority = function(callback){
   var query = {"priority" : -1}
   Artist.find().sort(query).limit(1).exec(callback);
 }
-module.exports.getArtists = function(limit,callback){
-  Artist.find(callback).limit(limit);
-}
-module.exports.getArtistById = function(id,callback){
-  Artist.findById(id,callback);
-}
-
-module.exports.searchArtistsByName = function(name,limit,callback){
+//
+//Search related funcs
+module.exports.searchArtistsByName = function(name,callback,limit){
   var query = {'name' : new RegExp('^'+name,"i")}
   Artist.find(query,callback).limit(limit);
 }
-module.exports.getArtistByName = function(name,callback)
-{
-  var query = {name : name};
-  Artist.findOne(query,callback);
+//
+///CRUD related funcs
+//add
+module.exports.addArtist = function(artist,callback){
+  Artist.create(artist,callback);
 }
+//
+//Edit
+module.exports.updateArtistByName = function(name,artist,callback){
+    var query = {name :name};
+    var options= {};
+    Artist.findOneAndUpdate(query,{'$push':{albums:artist}},callback);
+}
+module.exports.updateOrInsertArtist = function(id,artist,callback){
+  var query = {_id :id };
+  var options= {};
+  var update = {'$set' :artist};
+  if(id==-1)
+  {
+    options = {upsert : true};
+    Artist.find().update(update,options,callback);
+  }
+  else{
+      Artist.findOneAndUpdate(query,update,options,callback);
+  }
+}
+//
+//delete
+module.exports.deleteArtist = function(id, callback){
+  var query = {_id: id};
+  Artist.remove(query, callback);
+};

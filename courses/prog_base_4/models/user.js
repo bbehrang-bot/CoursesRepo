@@ -4,7 +4,6 @@ var userSchema = mongoose.Schema(
   {
     username:{
       type:String,
-      index :true
     },
     password:{
       type:String
@@ -13,6 +12,9 @@ var userSchema = mongoose.Schema(
       type:String
     },
     name:{
+      type:String
+    },
+    type:{
       type:String
     }
   }
@@ -32,6 +34,9 @@ module.exports.createUser = function(newUser,callback){
 module.exports.getUserByUsername = function(username,callback){
   var query = {username:username};
   User.findOne(query,callback);
+}
+module.exports.getUserByUsernameOrEmail = function(username,email,callback){
+  User.find({$or:[{username:username},{email:email}]},callback);
 }
 module.exports.getUserById = function(id,callback){
   User.findById(id,callback);

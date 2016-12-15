@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var albumsSchema = mongoose.Schema({
   name:{
     type:String,
-    required:true
+    required:true,
   },
   coverArt : {
     type:String,
@@ -15,6 +15,9 @@ var albumsSchema = mongoose.Schema({
   genre:{
     type:[String]
   },
+  price:{
+    type:Number
+  },
   artist:{
     type:String,
     required : true
@@ -23,8 +26,8 @@ var albumsSchema = mongoose.Schema({
     type:[{type:mongoose.Schema.Types.ObjectId,ref :'Song'}]
   }
 });
-var Album = module.exports =  mongoose.model('Albums',albumsSchema);
-//Get artists
+var Album = module.exports =  mongoose.model('Album',albumsSchema);
+//Get Albums
 module.exports.getAlbums = function(callback,limit){
   Album.find(callback).limit(limit);
 }
@@ -35,6 +38,11 @@ module.exports.getAlbumsByArtist = function(artist,callback)
 }
 module.exports.getAlbumById = function(id,callback){
   Album.findById(id,callback);
+}
+module.exports.getAlbumByName = function(name,callback)
+{
+  var query = {name : name};
+  Album.findOne(query,callback);
 }
 module.exports.getAlbumSongsById = function(id,callback,limit){
   Album.findById(id)
@@ -50,8 +58,20 @@ module.exports.getAlbumInfoByName = function(artistName,albumName,callback){
   .populate({path : 'songs',populate :{path:'songs'}}).exec(callback);
 
 }
+module.exports.addAlbum = function(album,callback){
+  Album.create(album,callback);
+}
 module.exports.getAllAlbumsSongs = function(callback,limit){
   Album.find()
+      .populate({
+      path : 'songs'
+      ,populate :{path:'songs'}
+    }).exec(callback);
+}
+module.exports.getAllAlbumsSongsByName = function(artistName,albumName,callback,limit){
+  var query = {name:albumName,artist:artistName}
+  console.log(query);
+  Album.findOne(query)
       .populate({
       path : 'songs'
       ,populate :{path:'songs'}

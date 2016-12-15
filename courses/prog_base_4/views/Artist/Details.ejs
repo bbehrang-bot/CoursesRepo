@@ -68,11 +68,12 @@
        $(".eye").css({"opacity":"0"});
        $(".artist_detail_info").css({"opacity":"0","margin-left":"-15%"});
        $(".artist_detail_albums").css({"opacity":"0","margin-top":"-15%"});
-
+       $(".artist_detail_songs").css({"opacity":"0","margin-right":"-15%"});
        $(".details_boxes").css({"display":"block"});
        setTimeout(function(){
          $(".artist_detail_info").css({"display":"none"});
          $(".artist_detail_albums").css({"display":"none"});
+         $(".artist_detail_songs").css({"display":"none"});
             $(".details_boxes").css({"opacity":"1"});
             $(".eye").css({"display":"none"});
           }, 400);
@@ -83,6 +84,8 @@
 
 
     $(".detials_info").on("click",function(){
+      $(".artist_details_body").animate({scrollTop:0},{queue:false});
+      $(".artist_details_body").perfectScrollbar();
       $(".artist_detail_info").css({"display":"block"});
       setTimeout(function(){
            $(".artist_detail_info").css({"opacity":"1","margin-left":"0"});
@@ -119,8 +122,89 @@
              $(".albumBox").on("mouseleave",function(){
                $(this).find(".album_name_hover").css("opacity","0");
              });
+             $(".artist_details_body").animate({scrollTop:0},{queue:false});
+
                $(".artist_details_body").perfectScrollbar();
            }
+      }).done(function(){
+      $(".albumBox").on("click",function(){
+        var artistName = $(".artist_details_name h2").text().trim();
+        var albumName = $(this).find(".album_name_span").text().trim();
+        var artist = {albumName:albumName,artistName:artistName}
+        $.ajax({
+          url:'/artists/albums/songs',
+          method:'POST',
+          data:artist,
+          success : function(response){
+            var frame = $(".artist_detail_songs");
+            frame.html("");
+            frame.append('<div class="audiojs   " classname="audiojs" id="audiojs_wrapper0"><audio preload="" src="'+response.albums.songs[0].songPath+'"></audio>          <div class="play-pause">             <p class="play"></p>             <p class="pause"></p>             <p class="loading"></p>             <p class="error"></p>           </div>           <div class="scrubber">             <div class="progress" style="width: 1.50639px;"></div>             <div class="loaded" style="width: 265.651px;"></div>           </div>           <div class="time">             <em class="played">00:01</em>/<strong class="duration">04:33</strong>           </div>           <div class="error-message"></div></div>');
+            var frameOl = frame.append("<ol class='ols'></ol>");
+            for(var i=0;i<response.albums.songs.length;i++)
+            {
+              $(".ols").append('<li><a class="songP" href="#" data-id="'+response.albums.songs[i]._id+'" data-src="'+response.albums.songs[i].songPath+'">'+response.albums.songs[i].name+'</a><div class="bsContainer"><a href="#" class="basket icon-buy"></span></div><div class="dlContainer"><a href="'+response.albums.songs[0].songPath +'" class="download icon-download" target="_blank" download></a></div></li>')
+            }
+          },
+          complete:function()
+          {
+            $(".artist_detail_albums").css({"opacity":"0","margin-top":"-15%"});
+            setTimeout(function(){
+              $(".artist_detail_albums").css({"display":"none"});
+            }, 100);
+            $(".artist_details_body").animate({scrollTop:0},{queue:false});
+            $(".artist_details_body").perfectScrollbar();
+
+              $(".artist_detail_songs").css("display","block");
+              setTimeout(function(){
+                   $(".artist_detail_songs").css({"opacity":"1","margin-right":"0"});
+                 }, 100);
+                 // Setup the player to autoplay the next track
+                // $(".audiojs")
+             var a = audiojs.createAll({
+               trackEnded: function() {
+                 var next = $('ol li.playing').next();
+                 if (!next.length) next = $('ol li').first();
+                 next.addClass('playing').siblings().removeClass('playing');
+                 audio.load($('a', next).attr('data-src'));
+                 audio.play();
+               }
+             });
+
+             // Load in the first track
+             var audio = a[0];
+                 first = $('ol a').attr('data-src');
+             $('ol li').first().addClass('playing');
+             audio.load(first);
+
+             // Load in a track on click
+             $('ol li').click(function(e) {
+
+               $(this).addClass('playing').siblings().removeClass('playing');
+               audio.load($('a', this).attr('data-src'));
+               audio.play();
+             });
+
+          }
+      }).done(function(){
+        $(".basket").on("click",function(e){
+          e.preventDefault();
+          var id = $(this).parent(".bsContainer").siblings(".songP").attr('data-id');
+          console.log(id);
+          var song = {id:id}
+          $.ajax({
+            url:'/cart/add/'+id,
+            method:'GET',
+            data:song,
+            success:function(response)
+            {
+              console.log(response);
+            }
+
+          });
+        });
+      });
+      });
+
       });
     });
     $(".detials_songs").on("click",function(e){
@@ -143,11 +227,13 @@
         },
         complete:function()
         {
+          $(".artist_details_body").animate({scrollTop:0},{queue:false});
+
           $(".artist_details_body").perfectScrollbar();
 
             $(".artist_detail_songs").css("display","block");
             setTimeout(function(){
-                 $(".artist_detail_songs").css({"opacity":"1","margin-top":"0"});
+                 $(".artist_detail_songs").css({"opacity":"1","margin-right":"0"});
                }, 100);
                // Setup the player to autoplay the next track
            var a = audiojs.createAll({
@@ -177,6 +263,9 @@
 
         }
     });
+
+
+
   });
 
 
