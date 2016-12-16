@@ -7,6 +7,24 @@ Artist = require('../models/artists.js');
 var ArtistModel = mongoose.model("Artist");
 var multer = require('multer');
 var mkdirp = require('mkdirp');
+function isEmpty(obj) {
+    // null and undefined are "empty"
+    if (obj == null) return true;
+
+    // Assume if it has a length property with a non-zero value
+    // that that property is correct.
+    if (obj.length && obj.length > 0)    return false;
+    if (obj.length === 0)  return true;
+
+    // Otherwise, does it have any properties of its own?
+    // Note that this doesn't handle
+    // toString and toValue enumeration bugs in IE < 9
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) return false;
+    }
+
+    return true;
+}
 //API
 router.get('/api',function(req,res){
     Artist.getArtistsFullInfoByName("drake",function(err,callback){
@@ -21,7 +39,51 @@ router.get('/api',function(req,res){
 router.get('/add',function(req,res){
     res.render("Artist/Add")
 });
-router.post('/add',function(req,res){
+router.get('/edit',function(req,res){
+    res.render("Artist/Edit");
+});
+router.post('/edit',function(req,res){
+    var artistName = req.body.name.toLowerCase();
+    console.log(artistName);
+    Artist.getArtistByName(artistName,function(err,artist){
+      if(err)
+      {
+        res.render('Error/somethingwrong',{error:err});
+      }
+      else{
+        var oldName = artist.name;
+        var newName = req.body.newname;
+        artist.name = req.body.newname || artist.name;
+        artist.description = req.body.description || artist.description;
+        Artist.updateOrInsertArtist(artist._id,artist,function(err,callback){
+          if(err)
+          {
+            res.render('Error/somethingwrong',{error:err});
+          }
+          else{
+            Album.updateAlbumByArtist(oldName,newName,function(err,albumEdited){
+              if(err)
+              {
+                res.render('Error/somethingwrong',{error:err});
+              }
+              else{
+                Song.updateSongByArtist(oldName,newName,function(err,songEdited){
+                  if(err)
+                  {
+                    res.render('Error/somethingwrong',{error:err});
+                  }
+                  else{
+                    res.send({artist:callback});
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+});
+router.post('/edit/images',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       //cb(null, 'artistsMedia/drake/songs')
@@ -29,7 +91,6 @@ router.post('/add',function(req,res){
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      console.log(file);
       cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
@@ -40,46 +101,80 @@ router.post('/add',function(req,res){
   }).fields([{name:'Logo',maxCount:1},{name:'artistHome',maxCount:1},{name:'otherImgs',maxCount:10}]);
   upload(req,res,function(err)
   {
-    //console.log(req.files);
-    //console.log(req.files.fieldname);
     if(err)
       res.render('Error/somethingwrong',{error:err});
       else{
-        Artist.getArtistLastPriority(function(err,lastprio){
+
+        Artist.getArtistByName(req.body.name,function(err,artistByName){
           if(err)
           {
-          res.render('Error/somethingwrong',{error:err});
+            res.render('Error/somethingwrong',{error:err});
           }
           else{
-            var lastPr = lastprio.priority;
-            console.log(lastprio);
-            var artist = new ArtistModel({
-              name : req.body.name.toLowerCase(),
-              description:req.body.description,
-              images:{
-                artistPage:'/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename,
-                logo: '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename,
-                otherImgs:[]
-              }
-            });
-            console.log(artist);
-            for(var i=0;i<req.files['otherImgs'].length;i++)
+            if(!isEmpty(req.files))
             {
-              artist.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
-            }
-            Artist.addArtist(artist,function(err,callback){
-              if(err)
+              if(!isEmpty(req.files['artistHome']))
               {
-                res.render('Error/somethingwrong',{error:err});
+                artistByName.images.artistPage='/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename;
               }
-              else{
-                res.send("created");
+              if(!isEmpty((req.files['Logo'])))
+              {
+                artistByName.images.logo= '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename;
               }
-            });
+              if(!isEmpty(req.files['otherImgs']))
+              {
+                for(var i=0;i<req.files['otherImgs'].length;i++)
+                {
+                    artistByName.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
+                }
+              }
+              Artist.updateOrInsertArtist(artistByName._id,artistByName,function(err,callback){
+                if(err)
+                {
+                  res.render('Error/somethingwrong',{error:err});
+                }
+                else{
+                  res.redirect('/artists/'+callback.name);
+                }
+              });
+            }
+            else{
+                res.redirect('/artists/'+artistByName.name);
+            }
+
           }
+
         });
       }
   });
+});
+router.post('/add/newArtist',function(req,res){
+  Artist.getArtistLastPriority(function(err,lastprio){
+    if(err)
+    {
+    res.render('Error/somethingwrong',{error:err});
+    }
+    else{
+      var lastPr = lastprio[0].priority;
+      lastPr++;
+      var artist = new ArtistModel({
+        name : req.body.name.toLowerCase(),
+        description:req.body.description,
+        priority:lastPr,
+      });
+      Artist.addArtist(artist,function(err,callback){
+        if(err)
+        {
+          res.render('Error/somethingwrong',{error:err});
+        }
+        else{
+          console.log(callback);
+          res.status(201).send({artist:callback});
+          }
+      });
+    }
+  });
+
 });
 router.post('/add/aristName',function(req,res){
   Artist.getArtistByName(req.body.name,function(err,callback){
@@ -147,5 +242,114 @@ router.get('/:name',function(req,res){
   });
 
 });
+router.post('/add',function(req,res){
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      //cb(null, 'artistsMedia/drake/songs')
+      var dir = 'artistsMedia/' + req.body.name.toLowerCase()+ '/images';
+      mkdirp(dir,err => cb(err,dir))
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
+    },
 
+  });
+  var upload = multer({
+    storage: storage,
+    limits :{fileSize :52428800}
+  }).fields([{name:'Logo',maxCount:1},{name:'artistHome',maxCount:1},{name:'otherImgs',maxCount:10}]);
+  upload(req,res,function(err)
+  {
+    //console.log(req.files);
+    //console.log(req.files.fieldname);
+    if(err)
+      res.render('Error/somethingwrong',{error:err});
+      else{
+        Artist.getArtistLastPriority(function(err,lastprio){
+          if(err)
+          {
+          res.render('Error/somethingwrong',{error:err});
+          }
+          else{
+            var lastPr = lastprio[0].priority;
+            lastPr++;
+            var artist = new ArtistModel({
+              name : req.body.name.toLowerCase(),
+              description:req.body.description,
+              priority : lastPr,
+              images:{
+                artistPage:'/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename,
+                logo: '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename,
+                otherImgs:[]
+              }
+            });
+            console.log(artist);
+            for(var i=0;i<req.files['otherImgs'].length;i++)
+            {
+              artist.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
+            }
+            Artist.addArtist(artist,function(err,callback){
+              if(err)
+              {
+                res.render('Error/somethingwrong',{error:err});
+              }
+              else{
+                res.send("created");
+              }
+            });
+          }
+        });
+      }
+  });
+});
+router.post('/add/images',function(req,res){
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      //cb(null, 'artistsMedia/drake/songs')
+      var dir = 'artistsMedia/' + req.body.name.toLowerCase()+ '/images';
+      mkdirp(dir,err => cb(err,dir))
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
+    },
+
+  });
+  var upload = multer({
+    storage: storage,
+    limits :{fileSize :52428800}
+  }).fields([{name:'Logo',maxCount:1},{name:'artistHome',maxCount:1},{name:'otherImgs',maxCount:10}]);
+  upload(req,res,function(err)
+  {
+    if(err)
+      res.render('Error/somethingwrong',{error:err});
+      else{
+        console.log('here');
+        console.log(req.body.name);
+        Artist.getArtistByName(req.body.name,function(err,artistByName){
+          if(err)
+          {
+            res.render('Error/somethingwrong',{error:err});
+          }
+          else{
+            artistByName.images.artistPage='/' +req.files['artistHome'][0].destination + '/'+req.files['artistHome'][0].filename;
+            artistByName.images.logo= '/' +req.files['Logo'][0].destination + '/'+req.files['Logo'][0].filename;
+            for(var i=0;i<req.files['otherImgs'].length;i++)
+            {
+              artistByName.images.otherImgs.push('/' + req.files['otherImgs'][i].destination + '/'+req.files['otherImgs'][i].filename)
+            }
+            Artist.updateOrInsertArtist(artistByName._id,artistByName,function(err,callback){
+              if(err)
+              {
+                res.render('Error/somethingwrong',{error:err});
+              }
+              else{
+                res.redirect('/artists/'+callback.name);
+              }
+            });
+          }
+
+        });
+      }
+  });
+});
 module.exports = router;

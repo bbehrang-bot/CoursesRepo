@@ -51,10 +51,9 @@
         $("#artistListInput").on("change",getArtist);
         function getArtist()
         {
-          console.log("called");
           var that = $(this);
           that.off("change");
-          var val = $("#artistListInput").val().toLocaleLowerCase();
+          var val = $("#artistListInput").val().toLowerCase();
           $.ajax({
             url: '/albums/add/artist',
             contentType : 'application/json',

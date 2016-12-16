@@ -32,6 +32,38 @@ router.post('/add/submit',function(req,res){
     }
   });
 });
+router.post('/edit',function(req,res){
+  Album.getAlbumByName(req.body.name,function(err,album){
+    if(err)
+    {
+      res.render('Error/somethingwrong',{error:err});
+    }
+    else
+    {
+      var oldName = album.name;
+      var newName = req.body.newname;
+      album.name = req.body.description || album.description;
+      Album.updateAlbum(album._id,album,function(err,editedAlbum){
+        if(err)
+        {
+          res.render('Error/somethingwrong',{error:err});
+        }
+        else{
+          Song.updateSongByAlbumName(oldname,newName,function(err,song){
+            if(err)
+            {
+              res.render('Error/somethingwrong',{error:err});
+            }
+            else{
+              res.send({album:editedAlbum});
+            }
+          });
+        }
+      });
+
+    }
+  });
+});
 router.post('/add',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -40,7 +72,7 @@ router.post('/add',function(req,res){
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      cb(null, req.body.name +'-'+ req.body.albumName +'-'+ file.originalname + Date.now()) //Appending extension
+      cb(null, req.body.name +'-'+ req.body.albumName +'-' + Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
   });
@@ -90,7 +122,7 @@ router.post('/add',function(req,res){
                 res.render('Error/somethingwrong',{error:err});
               }
               else{
-                res.json(artistAdded);
+                res.redirect('/artits/'+req.body.name.toLowerCase());
               }
             });
           }

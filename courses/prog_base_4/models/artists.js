@@ -88,15 +88,9 @@ module.exports.updateOrInsertArtist = function(id,artist,callback){
   var query = {_id :id };
   var options= {};
   var update = {'$set' :artist};
-  if(id==-1)
-  {
-    options = {upsert : true};
-    Artist.find().update(update,options,callback);
-  }
-  else{
-      Artist.findOneAndUpdate(query,update,options,callback);
-  }
+  Artist.findOneAndUpdate(query,update,options,callback);
 }
+
 //
 //delete
 module.exports.deleteArtist = function(id, callback){

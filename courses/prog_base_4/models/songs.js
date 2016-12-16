@@ -62,3 +62,9 @@ module.exports.findSongByArtistName = function(name,callback){
   var query = {artist : name};
   Song.find(query,callback);
 }
+module.exports.updateSongByArtist = function(artistName,newArtistName,callback){
+  Song.update({artist:artistName},{"$set":{artist:newArtistName}},{multi:true},callback);
+}
+module.exports.updateSongByAlbumName = function(albumName,newAlbumName,callback){
+  Album.update({album:albumName},{"$set":{album:newAlbumName}},{multi:true},callback);
+}

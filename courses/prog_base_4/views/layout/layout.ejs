@@ -16,6 +16,13 @@
   };
     $(document).ready(function(){
       var width = $(window).width();
+      var height = $(window).height();
+      $(".bodyContent").css("min-height",height -130);
+      $(window).resize(function(){
+        width = $(window).width();
+        height = $(window).height();
+          $(".bodyContent").css("min-height",height -130);
+      });
       var clickState = false;
       $(".menu").clickToggle(function(){
         $("#menu_bar2").css("opacity","0");

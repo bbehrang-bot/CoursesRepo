@@ -77,3 +77,12 @@ module.exports.getAllAlbumsSongsByName = function(artistName,albumName,callback,
       ,populate :{path:'songs'}
     }).exec(callback);
 }
+module.exports.updateAlbumByArtist = function(artistName,newArtistName,callback){
+  Album.update({artist:artistName},{"$set":{artist:newArtistName}},{multi:true},callback);
+}
+module.exports.updateAlbum = function(id,album,callback){
+  var query = {_id :id };
+  var options= {};
+  var update = {'$set' :album};
+  Album.findOneAndUpdate(query,update,options,callback);
+}
