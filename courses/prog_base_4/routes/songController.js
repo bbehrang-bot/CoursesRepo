@@ -160,7 +160,47 @@ router.delete('/api/:id',function(req,res)
 
   });
 });
+router.get('/edit',function(req,res){
+  res.render('Song/Edit');
+});
+router.post('/save',function(req,res){
+  console.log('s');
+  var song = {
+    name : req.body.name,
+    price:req.body.price
+  };
+  Song.updateSong(req.body.id,song,function(err,songSave){
+    if(err)
+    {
+      res.render('Error/somethingwrong',{error:err});
+    }
+    else{
+      Song.getSongById(req.body.id,function(err,newSong){
+        if(err)
+        {
+          res.render('Error/somethingwrong',{error:err});
+        }
+        else{
+          res.send({song:newSong});
+        }
 
+      });
+    }
+  });
+});
+router.post('/delete',function(req,res){
+  Song.deleteSong(req.body.id,function(err,callback){
+    if(err)
+    {
+      res.render('Error/somethingwrong',{error:err});
+    }
+    else{
+      res.send({id:req.body.id});
+
+    }
+  });
+
+});
 module.exports = router;
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated(),req.user.type=="admin"){

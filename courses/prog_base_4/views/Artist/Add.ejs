@@ -60,6 +60,7 @@
                           $(".bodyContent").append(' \
                           <form id="artistImageForm" class="forms" method="post" action="/artists/add/images" enctype="multipart/form-data" data-parsley-validate="">\
                           <input type="hidden" name="name" value="'+response.artist.name+'" />\
+                          <input type="hidden" name="id" value="'+response.artist._id+'" />\
                               <div class="form-group">\
                                 <label class="loginLabels" for="Logo">Logo :</label>\
                                 <input id="Logo" type="file" class="fileUp form-control" name="Logo" required="">\

@@ -7,7 +7,8 @@
 
   </div>
     <section class="bodyContent">
-      <form id="AlbumAddForm" method="post" action="/albums/addNew"  class="forms" data-parsley-validate="">
+      <!-- -->
+      <form id="AlbumAddForm" method="post" action="/albums/add"  class="forms" enctype="multipart/form-data" data-parsley-validate="">
         <div class="form-group">
           <label class="loginLabels" for="name">Artist name :</label>
           <input id="artistListInput" type="text" class="artistName form-control" name="name" placeholder="Enter artist's name..." required="">
@@ -16,12 +17,20 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="loginLabels" for="albumName">Album's name :</label>
+          <label class="loginLabels" for="albumName">Album name :</label>
           <input id="albumName" type="text" class="albumName form-control" name="albumName" placeholder="Enter album's name..." required="">
         </div>
         <div class="form-group">
           <label class="loginLabels" for="description">Description :</label>
           <input id="description" type="text" class="form-control" name="description" placeholder="Enter artist's description..." required="">
+        </div>
+        <div class="form-group">
+          <label class="loginLabels" for="coverArt">Cover Art :</label>
+          <input id="coverArt" type="file" class="fileUp form-control" name="coverArt" required="">
+        </div>
+        <div class="form-group">
+          <label class="loginLabels" for="songs">Songs :</label>
+          <input id="songs" type="file" class="fileUp form-control" name="songs" required="" multiple="">
         </div>
           <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -65,7 +74,6 @@
                   ');
                 });
                 $(".artistAjax").show({duration:'400ms',queue:false});
-
               }
               else{
                 $(".artistName").after('<ul class="parsley-errors-list filled"><li class="parsley-required">Artist not found.</li></ul>');
@@ -75,9 +83,10 @@
           $("#artistSelectionForm").on('click','.artistRadioBtns',function(){
                $('.artistRadioBtns').on('change',function(){
                  $(".artistName").siblings($(".parsley-errors-list").remove());
+                 $(".albumAjax").hide({duration:'400ms',queue:false});
+                 $(".albumAjax").detach();
                  var newClick = $("#artistSelectionForm input[name=artistListRadio]:checked").val();
                  $("#artistListInput").val(newClick);
-                 var artist = {name:newClick};
                });
             });
         }
@@ -135,7 +144,6 @@
             data:JSON.stringify(artist),
             success:function(response)
             {
-              var artistId = response.artist._id;
               if(response.artist != null)
               {
                 var valid = true;
@@ -149,43 +157,11 @@
                     break;
                   }
                 }
+                console.log(response.artist.albums);
                 if(valid)
                 {
                   $(".artistName").siblings($(".parsley-errors-list").remove());
-                  $("#albumName").siblings($(".parsley-errors-list").remove());
-                  var artistName =$("#AlbumAddForm input[name=artistListRadio]:checked").val();
-                  var albumName =$("#albumName").val();
-                  var description = $("#description").val();
-                  var req = {artistName:artistName,albumName:albumName,description:description}
-                  $.ajax({
-                    url:'add/newAlbum',
-                    method:'post',
-                    contentType : 'application/json',
-                    data:JSON.stringify(artist),
-                    success :function(response)
-                    {
-                      
-                      $("#AlbumAddForm").animate({opacity:0},{duration:400,queue:false,complete:function(){
-                        $("#AlbumAddForm").remove();
-                        $(".bodyContent").append(' \
-                        <form id="AlbumAddFormImage" method="post" action="/albums/edit/addImages"  class="forms" enctype="multipart/form-data" data-parsley-validate="">\
-                        <input type="hidden" name="id" value="'+response.album._id+'" />\
-                        <input type="hidden" name="artistId" value="'+artistId+'" />\
-                        <input type="hidden" name="name" value="'+response.album.artist+'" />\
-                                <div class="form-group">\
-                                  <label class="loginLabels" for="coverArt">Cover Art :</label>\
-                                  <input id="coverArt" type="file" class="fileUp form-control" name="coverArt" required="">\
-                                </div>\
-                                <div class="form-group">\
-                                  <label class="loginLabels" for="songs">Songs :</label>\
-                                  <input id="songs" type="file" class="fileUp form-control" name="songs" multiple="" required="">\
-                                </div>\
-                                  <button type="submit" class="btn btn-default">Submit</button>\
-                              </form>\
-                      ')
-                      }});
-                    }
-                  });
+                  form[0].submit();
                 }
               }
               else{

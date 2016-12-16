@@ -12,12 +12,6 @@ var albumsSchema = mongoose.Schema({
     type:String,
     default : null
   },
-  genre:{
-    type:[String]
-  },
-  price:{
-    type:Number
-  },
   artist:{
     type:String,
     required : true

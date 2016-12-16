@@ -143,12 +143,12 @@
                               var newname = $("#newname").val();
                               var name = $("#artistListInput").val();
                               var finalName = newname || name;
-                              console.log(finalName);
                               $("#artistEditForm").animate({opacity:0},{duration:400,queue:false,complete:function(){
                                 $("#artistEditForm").remove();
                                 $(".bodyContent").append(' \
                                 <form id="artistImageForm" class="forms" method="post" action="/artists/edit/images" enctype="multipart/form-data" data-parsley-validate="">\
                                 <input type="hidden" name="name" value="'+finalName+'" />\
+                                <input type="hidden" name="id" value="'+response.artist._id+'" />\
                                     <div class="form-group">\
                                       <label class="loginLabels" for="Logo">Logo :</label>\
                                       <input id="Logo" type="file" class="fileUp form-control" name="Logo">\

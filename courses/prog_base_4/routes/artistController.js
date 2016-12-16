@@ -44,7 +44,6 @@ router.get('/edit',function(req,res){
 });
 router.post('/edit',function(req,res){
     var artistName = req.body.name.toLowerCase();
-    console.log(artistName);
     Artist.getArtistByName(artistName,function(err,artist){
       if(err)
       {
@@ -87,11 +86,11 @@ router.post('/edit/images',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       //cb(null, 'artistsMedia/drake/songs')
-      var dir = 'artistsMedia/' + req.body.name.toLowerCase()+ '/images';
+      var dir = 'artistsMedia/' + req.body.id+ '/images';
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
+      cb(null, req.body.id + encodeURI(req.body.name.toLowerCase()) + encodeURI(file.fieldname.toLowerCase()) +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
   });
@@ -246,11 +245,11 @@ router.post('/add',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       //cb(null, 'artistsMedia/drake/songs')
-      var dir = 'artistsMedia/' + req.body.name.toLowerCase()+ '/images';
+      var dir = 'artistsMedia/' + req.body.id+ '/images';
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
+      cb(null, req.body.id+ file.fieldname + Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
   });
@@ -306,11 +305,11 @@ router.post('/add/images',function(req,res){
   var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       //cb(null, 'artistsMedia/drake/songs')
-      var dir = 'artistsMedia/' + req.body.name.toLowerCase()+ '/images';
+      var dir = 'artistsMedia/' + req.body.id+ '/images';
       mkdirp(dir,err => cb(err,dir))
     },
     filename: function (req, file, cb) {
-      cb(null, req.body.name.toLowerCase() +'-'+ file.fieldname +'-'+ Date.now() + path.extname(file.originalname)) //Appending extension
+      cb(null, req.body.id +encodeURI(req.body.name)+encodeURI(file.fieldname.toLowerCase())+ Date.now() + path.extname(file.originalname)) //Appending extension
     },
 
   });

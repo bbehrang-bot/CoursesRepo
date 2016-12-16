@@ -28,12 +28,10 @@ var songsSchema = mongoose.Schema({
   artist:{
     type:String,
     required:true
-  }
-  /*album:{
+  },
+  album:{
     type:[{type:mongoose.Schema.Types.ObjectId,ref :'Album'}]
-  }*/
-
-
+  }
 });
 var Song = module.export = mongoose.model('Song',songsSchema);
 //Get artists
@@ -65,6 +63,6 @@ module.exports.findSongByArtistName = function(name,callback){
 module.exports.updateSongByArtist = function(artistName,newArtistName,callback){
   Song.update({artist:artistName},{"$set":{artist:newArtistName}},{multi:true},callback);
 }
-module.exports.updateSongByAlbumName = function(albumName,newAlbumName,callback){
-  Album.update({album:albumName},{"$set":{album:newAlbumName}},{multi:true},callback);
+module.exports.updateSongByAlbumName = function(id,newAlbumName,callback){
+  Song.update({_id:id},{"$set":{album:newAlbumName}},{multi:true},callback);
 }
